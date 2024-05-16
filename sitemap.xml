@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/blog/firstpost/</loc>
+		<loc>https://mikeverhees.com/blog/firstpost/</loc>
 		<lastmod>2018-05-01</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/blog/secondpost/</loc>
+		<loc>https://mikeverhees.com/blog/secondpost/</loc>
 		<lastmod>2018-07-04</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/blog/thirdpost/</loc>
+		<loc>https://mikeverhees.com/blog/thirdpost/</loc>
 		<lastmod>2018-08-24</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/blog/fourthpost/</loc>
+		<loc>https://mikeverhees.com/blog/fourthpost/</loc>
 		<lastmod>2018-09-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/about/</loc>
+		<loc>https://mikeverhees.com/about/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/blog/</loc>
+		<loc>https://mikeverhees.com/blog/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/</loc>
+		<loc>https://mikeverhees.com/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/tags/</loc>
+		<loc>https://mikeverhees.com/tags/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/tags/another-tag/</loc>
+		<loc>https://mikeverhees.com/tags/another-tag/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/tags/number-2/</loc>
+		<loc>https://mikeverhees.com/tags/number-2/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/tags/second-tag/</loc>
+		<loc>https://mikeverhees.com/tags/second-tag/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mikeverhees.com/eleventy-base-blog/tags/posts-with-two-tags/</loc>
+		<loc>https://mikeverhees.com/tags/posts-with-two-tags/</loc>
 		<lastmod>2024-05-16</lastmod>
 	</url>
 </urlset>

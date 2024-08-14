@@ -20,14 +20,9 @@
 	--syntax-tab-size: 2;
 }
 .icon {
-	/* filter: opacity(50%); */
-	/* filter: contrast(100); */
 	filter: brightness(0) opacity(50%);
-	/* fill: white; */
-	/* color: white; */
   }
   .icon:hover {
-	/* filter: opacity(100%); */
 	filter: brightness(0) opacity(100%);
   }
   

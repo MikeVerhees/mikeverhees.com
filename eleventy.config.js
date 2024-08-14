@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
 const pluginRss = require("@11ty/eleventy-plugin-rss");
@@ -11,6 +12,9 @@ const pluginDrafts = require("./eleventy.config.drafts.js");
 const pluginImages = require("./eleventy.config.images.js");
 
 module.exports = function(eleventyConfig) {
+	const md = new markdownIt({
+		html: true
+	  });
 	// Copy the contents of the `public` folder to the output folder
 	// For example, `./public/css/` ends up in `_site/css/`
 	eleventyConfig.addPassthroughCopy({
@@ -95,6 +99,10 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addShortcode("currentBuildDate", () => {
 		return (new Date()).toISOString();
 	})
+
+	eleventyConfig.addPairedShortcode("markdown", (content) => {
+		return md.render(content);
+	  });
 
 	// Features to make your build faster (when you need them)
 

@@ -9,7 +9,7 @@ numberOfLatestPostsToShow: 3
 {% set latestPostsCount = postsCount | min(numberOfLatestPostsToShow) %}
 
 {% markdown %}
-{% include 'partials/about/index.md' %}
+{% include 'partials/about.md' %}
 {% endmarkdown %}
 <h1>Latest {{ latestPostsCount }} Post{% if latestPostsCount != 1 %}s{% endif %}</h1>
 

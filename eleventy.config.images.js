@@ -1,5 +1,5 @@
-const path = require("path");
-const eleventyImage = require("@11ty/eleventy-img");
+import path from "path";
+import Image, { generateHTML } from "@11ty/eleventy-img";
 
 function relativeToInputPath(inputPath, relativeFilePath) {
 	let split = inputPath.split("/");
@@ -18,7 +18,7 @@ function isFullUrl(url) {
 	}
 }
 
-module.exports = function(eleventyConfig) {
+export default function(eleventyConfig) {
 	// Eleventy Image shortcode
 	// https://www.11ty.dev/docs/plugins/image/
 	eleventyConfig.addAsyncShortcode("image", async function imageShortcode(src, alt, widths, sizes) {
@@ -32,7 +32,7 @@ module.exports = function(eleventyConfig) {
 			input = relativeToInputPath(this.page.inputPath, src);
 		}
 
-		let metadata = await eleventyImage(input, {
+		let metadata = await Image(input, {
 			widths: widths || ["auto"],
 			formats,
 			outputDir: path.join(eleventyConfig.dir.output, "img"), // Advanced usage note: `eleventyConfig.dir` works here because we’re using addPlugin.
@@ -46,6 +46,6 @@ module.exports = function(eleventyConfig) {
 			decoding: "async",
 		};
 
-		return eleventyImage.generateHTML(metadata, imageAttributes);
+		return generateHTML(metadata, imageAttributes);
 	});
 };

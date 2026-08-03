@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+	--color-accent: rgba(250, 150, 20, 0.86);
+	--color-accent-active: rgba(250, 150, 20, 1);
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333333;
+	--font-sans: -apple-system, system-ui, sans-serif;
+	--font-mono: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono",
+		"Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
+		"Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L",
+		"Courier New", Courier, monospace;
+	--max-width-content: 800px;
+}
+
+:root {
+	--background-color: #ffffffe5;
+	--text-color: var(--color-gray-90);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-90: #dad8d8;
+		--background-color: rgb(8 14 25);
+	}
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: var(--max-width-content);
+	font-family: var(--font-sans);
+}
+
+a[href] {
+	color: var(--color-accent);
+}
+a[href]:visited {
+	color: var(--color-accent);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--color-accent-active);
+}
+
+/* Icons are dimmed and brighten on hover/dark mode via filter rather than
+   swapping SVG assets - matches the previous CSS approach. */
+.icon {
+	filter: brightness(0) opacity(50%);
+}
+.icon:hover {
+	filter: brightness(0) opacity(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+	.icon {
+		filter: brightness(0) invert(0.5);
+	}
+	.icon:hover {
+		filter: brightness(0) invert(1);
+	}
+	img {
+		filter: grayscale(20%);
+	}
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}

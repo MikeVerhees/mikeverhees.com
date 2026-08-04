@@ -53,4 +53,8 @@ Disallow: /
 User-agent: ImagesiftBot
 Disallow: /
 
+User-agent: *
+Allow: /
+
+Sitemap: https://mikeverhees.com/sitemap.xml
 

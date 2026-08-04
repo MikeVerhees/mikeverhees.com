@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+	--color-accent: rgba(250, 150, 20, 0.86);
+	--color-accent-active: rgba(250, 150, 20, 1);
+	--color-gray-20: #e0e0e0;
+	--font-sans: -apple-system, system-ui, sans-serif;
+	--max-width-content: 800px;
+}
+
+/* --color-gray-90 lives outside @theme (like the vars below) because it
+   flips per color scheme - a @theme token implies a static design value. */
+:root {
+	--color-gray-90: #333333;
+	--background-color: #ffffffe5;
+	--text-color: var(--color-gray-90);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-90: #dad8d8;
+		--background-color: rgb(8 14 25);
+	}
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: var(--max-width-content);
+	font-family: var(--font-sans);
+}
+
+a[href] {
+	color: var(--color-accent);
+}
+a[href]:visited {
+	color: var(--color-accent);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--color-accent-active);
+}
+
+/* Icons are dimmed and brighten on hover/dark mode via filter rather than
+   swapping SVG assets. */
+.icon {
+	filter: brightness(0) opacity(50%);
+}
+.icon:hover {
+	filter: brightness(0) opacity(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+	.icon {
+		filter: brightness(0) invert(0.5);
+	}
+	.icon:hover {
+		filter: brightness(0) invert(1);
+	}
+}

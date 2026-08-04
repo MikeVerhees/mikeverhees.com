@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { contactLinks } from "@/lib/site";
 
 export default function Footer() {
@@ -5,7 +6,7 @@ export default function Footer() {
 		<footer className="p-4">
 			{contactLinks.map((link) => (
 				<a key={link.label} href={link.href} className="mr-2 inline-block">
-					<img
+					<Image
 						src={link.icon}
 						className="icon inline-block"
 						alt={link.label}

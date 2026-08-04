@@ -42,7 +42,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<a href="#skip" className="visually-hidden">
+				<a href="#skip" className="sr-only">
 					Skip to main content
 				</a>
 

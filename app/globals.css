@@ -4,17 +4,14 @@
 	--color-accent: rgba(250, 150, 20, 0.86);
 	--color-accent-active: rgba(250, 150, 20, 1);
 	--color-gray-20: #e0e0e0;
-	--color-gray-50: #c0c0c0;
-	--color-gray-90: #333333;
 	--font-sans: -apple-system, system-ui, sans-serif;
-	--font-mono: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono",
-		"Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
-		"Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L",
-		"Courier New", Courier, monospace;
 	--max-width-content: 800px;
 }
 
+/* --color-gray-90 lives outside @theme (like the vars below) because it
+   flips per color scheme - a @theme token implies a static design value. */
 :root {
+	--color-gray-90: #333333;
 	--background-color: #ffffffe5;
 	--text-color: var(--color-gray-90);
 }
@@ -55,7 +52,7 @@ a[href]:active {
 }
 
 /* Icons are dimmed and brighten on hover/dark mode via filter rather than
-   swapping SVG assets - matches the previous CSS approach. */
+   swapping SVG assets. */
 .icon {
 	filter: brightness(0) opacity(50%);
 }
@@ -70,18 +67,4 @@ a[href]:active {
 	.icon:hover {
 		filter: brightness(0) invert(1);
 	}
-	img {
-		filter: grayscale(20%);
-	}
-}
-
-/* https://www.a11yproject.com/posts/how-to-hide-content/ */
-.visually-hidden {
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
-	position: absolute;
-	white-space: nowrap;
-	width: 1px;
 }

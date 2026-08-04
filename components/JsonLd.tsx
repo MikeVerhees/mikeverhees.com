@@ -1,21 +1,23 @@
-import { siteTitle, siteUrl } from "@/lib/site";
+import { author, contactLinks, siteTitle, siteUrl } from "@/lib/site";
 
 export default function JsonLd() {
+	const githubUrl = contactLinks.find((link) => link.label === "GitHub")?.href;
+
 	const data = {
 		"@context": "https://schema.org",
 		"@graph": [
 			{
 				"@type": "Person",
-				name: "Mike Verhees",
-				url: siteUrl,
-				email: "mailto:mail@mikeverhees.com",
+				name: author.name,
+				url: author.url,
+				email: `mailto:${author.email}`,
 				jobTitle: "Software Developer",
 				worksFor: {
 					"@type": "Organization",
 					name: "OrcaGroup",
 					url: "https://www.orcagroup.com/",
 				},
-				sameAs: ["https://github.com/mikeverhees"],
+				sameAs: githubUrl ? [githubUrl] : undefined,
 			},
 			{
 				"@type": "WebSite",

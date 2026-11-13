@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal website and blog for Mike Verhees, built with [Eleventy (11ty) v2](https://www.11ty.dev/). Outputs a static site to `_site/` and deploys to GitHub Pages.
+Personal website and blog for Mike Verhees, built with [Eleventy (11ty) v3](https://www.11ty.dev/). Outputs a static site to `_site/` and deploys to GitHub Pages.
 
 ## Commands
 

@@ -1,0 +1,26 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getPosts } from "../../lib/content";
+import { allTags, tagUrl } from "../../lib/posts";
+
+const tags = allTags(await getPosts());
+---
+
+<Base title="Tags">
+	<h1>Tags</h1>
+	{
+		tags.length > 0 ? (
+			<ul>
+				{tags.map((tag) => (
+					<li>
+						<a href={tagUrl(tag)} class="post-tag">
+							{tag}
+						</a>
+					</li>
+				))}
+			</ul>
+		) : (
+			<p>No tags yet.</p>
+		)
+	}
+</Base>

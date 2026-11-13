@@ -1,13 +1,16 @@
 {
-	"name": "mikeverhees.com-11ty",
+	"name": "mikeverhees.com",
 	"version": "8.0.0",
-	"description": "Personal website of Mike Verhees, built with Eleventy.",
+	"description": "Personal website of Mike Verhees, built with Astro.",
 	"scripts": {
-		"build": "npx @11ty/eleventy",
-		"start": "npx @11ty/eleventy --serve --quiet",
-		"debug": "DEBUG=Eleventy* npx @11ty/eleventy",
-		"debugstart": "DEBUG=Eleventy* npx @11ty/eleventy --serve --quiet",
-		"benchmark": "DEBUG=Eleventy:Benchmark* npx @11ty/eleventy"
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"check": "astro check",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:e2e": "playwright test"
 	},
 	"repository": {
 		"type": "git",
@@ -26,16 +29,13 @@
 	"bugs": {
 		"url": "https://github.com/MikeVerhees/mikeverhees.com/issues"
 	},
-	"homepage": "https://github.com/MikeVerhees/mikeverhees.com",
 	"devDependencies": {
-		"@11ty/eleventy": "^3.1.6",
-		"@11ty/eleventy-img": "^7.1.1",
-		"@11ty/eleventy-navigation": "^1.0.5",
-		"@11ty/eleventy-plugin-bundle": "^3.0.7",
-		"@11ty/eleventy-plugin-rss": "^2.0.4",
-		"@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
-		"luxon": "^3.7.2",
-		"markdown-it": "^14.3.3",
-		"markdown-it-anchor": "^9.2.1"
+		"@astrojs/check": "^0.9.12",
+		"@axe-core/playwright": "^4.14.0",
+		"@playwright/test": "^1.65.1",
+		"@types/node": "^22.20.5",
+		"astro": "^7.4.12",
+		"typescript": "^6.0.3",
+		"vitest": "^5.1.0"
 	}
 }

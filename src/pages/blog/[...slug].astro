@@ -1,0 +1,54 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { getPosts } from "../../lib/content";
+import { isoDate, postUrl, readableDate, tagUrl } from "../../lib/posts";
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	// Posts are newest first, so the "previous" (older) post is the next item.
+	return posts.map((post, i) => ({
+		params: { slug: post.id },
+		props: { post, newer: posts[i - 1], older: posts[i + 1] },
+	}));
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Base title={post.data.title} description={post.data.description}>
+	<h1>{post.data.title}</h1>
+
+	<ul class="post-metadata">
+		<li><time datetime={isoDate(post.data.date)}>{readableDate(post.data.date)}</time></li>
+		{
+			post.data.tags.map((tag) => (
+				<li>
+					<a href={tagUrl(tag)} class="post-tag">
+						{tag}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+
+	<Content />
+
+	{
+		(older || newer) && (
+			<ul class="links-nextprev">
+				{older && (
+					<li>
+						Previous: <a href={postUrl(older)}>{older.data.title}</a>
+					</li>
+				)}
+				{newer && (
+					<li>
+						Next: <a href={postUrl(newer)}>{newer.data.title}</a>
+					</li>
+				)}
+			</ul>
+		)
+	}
+</Base>

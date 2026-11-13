@@ -1,0 +1,68 @@
+---
+import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { Content as Footer } from "../partials/footer.md";
+import { site } from "../site";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | ${site.title}` : site.title;
+const currentPath = Astro.url.pathname;
+const canonical = new URL(currentPath, Astro.site);
+---
+
+<!doctype html>
+<html lang={site.language}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description ?? site.description} />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title={site.title} />
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title={site.title} />
+		<meta name="generator" content={Astro.generator} />
+		{/* Apply a saved theme before first paint so there's no flash of the wrong theme. */}
+		<script is:inline>
+			try {
+				const theme = localStorage.getItem("theme");
+				if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+			} catch {}
+		</script>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">{site.title}</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					{
+						site.nav.map((entry) => (
+							<li class="nav-item">
+								<a href={entry.url} aria-current={entry.url === currentPath ? "page" : undefined}>
+									{entry.title}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+			<ThemeToggle />
+		</header>
+
+		<main id="skip">
+			<slot />
+		</main>
+
+		<footer>
+			<Footer />
+		</footer>
+	</body>
+</html>

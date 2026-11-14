@@ -31,7 +31,7 @@ export const COMMANDS: Record<string, string> = {
 	"ls [posts]": "list posts",
 	"cat <post>": "open a post",
 	"open <name>": "github · mail · signal · writing · tags · about",
-	stack: "what this site is built with",
+	stack: "languages and tools I work with",
 	pet: "pet the cat",
 	theme: "toggle light/dark",
 	clear: "clear the screen",
@@ -115,7 +115,7 @@ export function run(input: string, ctx: TerminalContext): TerminalResult {
 		}
 
 		case "stack":
-			return { output: [ctx.stack.join(" · "), "static HTML, JavaScript only for islands like this one"] };
+			return { output: [ctx.stack.join(" · ")] };
 
 		case "pet":
 			return { output: ["🐾 the cat wakes up and purrs"], effect: { type: "pet-cat" } };

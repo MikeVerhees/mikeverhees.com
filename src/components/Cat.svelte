@@ -1,31 +1,16 @@
 <script lang="ts">
-	// Svelte island (client:visible). A pixel cat that naps and wakes up when
+	// Svelte island (client:visible). An ASCII cat that naps and wakes up when
 	// petted: by clicking it, from the command palette, or with `pet` in the terminal.
 	import { onMount } from "svelte";
 	import { EVENTS } from "../scripts/events";
 
-	const PX = 10;
-	// # fur, - closed eye, o open eye, p nose
-	const BODY = [
-		"..#.....#...",
-		".###...###..",
-		".#########..",
-		"##########..",
-		"#e#####e##..",
-		"####pp####..",
-		".########...",
-		"..######....",
-		".##########.",
-		"############",
-		"############",
-		".##########.",
-	];
+	// Plain text art, drawn in the monospace font. Each frame is five lines.
+	const NAPPING = ["  /\\_/\\", " ( -.- )", "  > ^ <", " /     \\_", "(_|_ _|_)"];
+	const AWAKE = ["  /\\_/\\", " ( o.o )", "  > ^ <", " /     \\_", "(_|_ _|_)"];
 
 	let awake = $state(false);
 	let pets = $state(0);
 	let timer: ReturnType<typeof setTimeout> | undefined;
-
-	const pixels = BODY.flatMap((row, y) => [...row].map((c, x) => ({ c, x, y })).filter((p) => p.c !== "."));
 
 	function pet() {
 		awake = true;
@@ -44,22 +29,7 @@
 </script>
 
 <button type="button" class="cat" class:awake onclick={pet} aria-label="Pet the cat" aria-describedby="cat-status">
-	<svg viewBox="0 0 {12 * PX} {12 * PX}" width="96" height="96" aria-hidden="true">
-		{#each pixels as p (p.x + "," + p.y)}
-			{#if p.c === "#"}
-				<rect x={p.x * PX} y={p.y * PX} width={PX} height={PX} class="fur" />
-			{:else if p.c === "p"}
-				<rect x={p.x * PX} y={p.y * PX} width={PX} height={PX} class="nose" />
-			{:else if p.c === "e"}
-				{#if awake}
-					<rect x={p.x * PX} y={p.y * PX} width={PX} height={PX} class="eye" />
-				{:else}
-					<rect x={p.x * PX} y={p.y * PX} width={PX} height={PX} class="fur" />
-					<rect x={p.x * PX} y={p.y * PX + 5} width={PX} height="2" class="eye" />
-				{/if}
-			{/if}
-		{/each}
-	</svg>
+	<pre class="art" aria-hidden="true">{(awake ? AWAKE : NAPPING).join("\n")}</pre>
 	<span class="bubble mono" aria-hidden="true">{awake ? "♥ prrr" : "z Z z"}</span>
 </button>
 <p id="cat-status" class="status" aria-live="polite">
@@ -77,23 +47,22 @@
 		color: inherit;
 		cursor: pointer;
 	}
-	.fur {
-		fill: var(--fg);
-		opacity: 0.85;
-	}
-	.eye {
-		fill: var(--card-solid);
-	}
-	.nose {
-		fill: #f472b6;
+	.art {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.25;
+		color: var(--fg);
+		text-align: left;
 	}
 	.bubble {
-		margin-bottom: 64px;
+		margin-bottom: 72px;
 		font-size: 0.85rem;
 		color: var(--accent);
 		animation: float 3s ease-in-out infinite;
 	}
-	.awake svg {
+	.awake .art {
 		animation: wiggle 0.35s ease-in-out 2;
 	}
 	.status {

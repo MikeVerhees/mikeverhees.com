@@ -87,7 +87,7 @@ test.describe("terminal", () => {
 		await expect(log).toContainText("pet the cat");
 
 		await typeCommand(page, "stack");
-		await expect(log).toContainText("TypeScript · Astro · Svelte · Bun");
+		await expect(log).toContainText("TypeScript · JavaScript");
 
 		await typeCommand(page, "nonsense");
 		await expect(log).toContainText("command not found: nonsense");

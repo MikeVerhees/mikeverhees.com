@@ -14,11 +14,7 @@ export interface TerminalContext {
 	location: string;
 }
 
-export type TerminalEffect =
-	| { type: "clear" }
-	| { type: "navigate"; url: string; external?: boolean }
-	| { type: "pet-cat" }
-	| { type: "toggle-theme" };
+export type TerminalEffect = { type: "clear" } | { type: "navigate"; url: string; external?: boolean } | { type: "pet-cat" } | { type: "toggle-theme" };
 
 export interface TerminalResult {
 	output: string[];
@@ -53,12 +49,7 @@ export function complete(input: string, ctx: TerminalContext): string | undefine
 		const match = names.filter((n) => n.startsWith(command));
 		return match.length === 1 ? `${match[0]} ` : undefined;
 	}
-	const options =
-		command === "cat"
-			? ctx.posts.map((p) => p.slug)
-			: command === "open"
-				? ["github", "mail", "signal", ...Object.keys(PAGES)]
-				: [];
+	const options = command === "cat" ? ctx.posts.map((p) => p.slug) : command === "open" ? ["github", "mail", "signal", ...Object.keys(PAGES)] : [];
 	const match = options.filter((o) => o.startsWith(arg));
 	return match.length === 1 ? `${command} ${match[0]}` : undefined;
 }

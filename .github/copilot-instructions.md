@@ -5,7 +5,7 @@ Personal website and blog for Mike Verhees, built with Astro as a fully static s
 ## Constraints
 
 - The site must stay static (`output: "static"`). No server runtime, SSR adapter or API routes that need a server.
-- JavaScript only for interactivity, as small TypeScript web components in an Astro component's `<script>` tag. No UI framework unless agreed.
+- JavaScript only for interactivity, as Svelte 5 islands (`.svelte` in src/components, used with a `client:*` directive). Prefer `client:visible`/`client:idle` over `client:load` when the island isn't needed immediately.
 - Keep the AI-crawler rules in `public/robots.txt`.
 
 ## Layout
@@ -14,7 +14,7 @@ Personal website and blog for Mike Verhees, built with Astro as a fully static s
 src/content/blog/   Blog posts (Markdown); schema in src/content.config.ts
 src/partials/       About and footer Markdown, rendered on every page / home
 src/layouts/        Base.astro (html shell, header, nav, footer)
-src/components/     PostList, ThemeToggle
+src/components/     PostList.astro, ThemeToggle.svelte (island)
 src/pages/          Routes: /, /blog/, /blog/[slug]/, /tags/, /tags/[tag]/, feeds, sitemap, 404
 src/lib/            Pure helpers (posts, feeds) and Astro data access (content.ts)
 src/scripts/        Client-side TypeScript for islands

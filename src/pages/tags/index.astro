@@ -1,0 +1,27 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getPosts } from "../../lib/content";
+import { allTags, tagUrl } from "../../lib/posts";
+
+const tags = allTags(await getPosts());
+---
+
+<Base title="Tags">
+	<section class="card prose">
+		<p class="card-label">~/tags</p>
+		<h1>Tags</h1>
+		{
+			tags.length > 0 ? (
+				<ul class="pills">
+					{tags.map((tag) => (
+						<li style="padding:0;border:0">
+							<a href={tagUrl(tag)}>#{tag}</a>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p class="muted">No tags yet.</p>
+			)
+		}
+	</section>
+</Base>

@@ -1,0 +1,23 @@
+---
+import { site } from "../site";
+
+interface Props {
+	size?: number;
+}
+const { size = 24 } = Astro.props;
+const links = [
+	{ name: "Mail", href: site.links.mail, icon: "/img/mail.svg" },
+	{ name: "Signal", href: site.links.signal, icon: "/img/signal.svg" },
+	{ name: "GitHub", href: site.links.github, icon: "/img/github-mark.svg" },
+];
+---
+
+<div class="icon-row">
+	{
+		links.map((link) => (
+			<a href={link.href} aria-label={link.name} rel={link.href.startsWith("http") ? "me noopener" : undefined}>
+				<img class="icon" src={link.icon} alt="" width={size} height={size} />
+			</a>
+		))
+	}
+</div>

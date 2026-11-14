@@ -1,4 +1,10 @@
-_site/
+# build output
+dist/
+.astro/
+
+# dependencies
 node_modules/
-package-lock.json
-.cache
+
+# test output
+test-results/
+playwright-report/

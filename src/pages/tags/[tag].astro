@@ -1,0 +1,25 @@
+---
+import Base from "../../layouts/Base.astro";
+import PostLinks from "../../components/PostLinks.astro";
+import { getPosts } from "../../lib/content";
+import { allTags, postsWithTag, slugify } from "../../lib/posts";
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return allTags(posts).map((tag) => ({
+		params: { tag: slugify(tag) },
+		props: { tag, posts: postsWithTag(posts, tag) },
+	}));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Base title={`Tagged #${tag}`}>
+	<section class="card prose">
+		<p class="card-label">~/tags/{slugify(tag)}</p>
+		<h1>Tagged #{tag}</h1>
+		<PostLinks posts={posts} />
+		<p class="mono" style="font-size:.85rem"><a href="/tags/">← all tags</a></p>
+	</section>
+</Base>

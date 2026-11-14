@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getPosts } from "../lib/content";
-import { sitemap, type SitemapEntry } from "../lib/feeds";
+import { type SitemapEntry, sitemap } from "../lib/feeds";
 import { allTags, postUrl, tagUrl } from "../lib/posts";
 import { site } from "../site";
 

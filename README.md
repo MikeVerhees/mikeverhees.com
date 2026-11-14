@@ -49,6 +49,7 @@ Without a `client:*` directive a Svelte component is rendered to static HTML at 
 ## Tests
 
 ```bash
+bun run lint       # Biome lint + format check (auto-fix with bun run lint:fix)
 bun run check      # type-check .astro and .ts files
 bun run test       # unit tests with bun test (tests/unit)
 bun run build && bun run test:e2e   # Playwright end-to-end tests against dist/ (tests/e2e)
@@ -61,4 +62,4 @@ The first time, install the Playwright browser with `bunx playwright install chr
 
 ## Deployment
 
-GitHub Actions (`.github/workflows/gh-pages.yml`) runs the type-check, unit tests, build and end-to-end tests on every push and pull request. Pushes to `main` that pass are deployed to GitHub Pages.
+GitHub Actions (`.github/workflows/gh-pages.yml`) runs the Biome lint, type-check, unit tests, build and end-to-end tests on every push and pull request. Pushes to `main` that pass are deployed to GitHub Pages. Third-party actions are pinned to commit SHAs.

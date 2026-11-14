@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { atomFeed, escapeXml, jsonFeed, sitemap, type FeedItem, type FeedSite } from "../../src/lib/feeds";
+import { atomFeed, escapeXml, type FeedItem, type FeedSite, jsonFeed, sitemap } from "../../src/lib/feeds";
 
 const site: FeedSite = {
 	title: "Test & Site",

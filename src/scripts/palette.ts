@@ -28,10 +28,7 @@ export const GROUP_LABELS: Record<PaletteGroup, string> = {
 const GROUP_ORDER: PaletteGroup[] = ["writing", "pages", "actions"];
 
 function normalize(value: string): string {
-	return value
-		.normalize("NFKD")
-		.replace(/[̀-ͯ]/g, "")
-		.toLowerCase();
+	return value.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
 /**
@@ -60,17 +57,10 @@ export function score(item: PaletteItem, query: string): number {
 
 /** Items matching `query`, grouped in a fixed order and best match first within each group. */
 export function search(items: PaletteItem[], query: string): PaletteItem[] {
-	const scored = items
-		.map((item, index) => ({ item, index, score: score(item, query) }))
-		.filter((entry) => entry.score > 0);
+	const scored = items.map((item, index) => ({ item, index, score: score(item, query) })).filter((entry) => entry.score > 0);
 
 	return scored
-		.sort(
-			(a, b) =>
-				GROUP_ORDER.indexOf(a.item.group) - GROUP_ORDER.indexOf(b.item.group) ||
-				b.score - a.score ||
-				a.index - b.index,
-		)
+		.sort((a, b) => GROUP_ORDER.indexOf(a.item.group) - GROUP_ORDER.indexOf(b.item.group) || b.score - a.score || a.index - b.index)
 		.map((entry) => entry.item);
 }
 

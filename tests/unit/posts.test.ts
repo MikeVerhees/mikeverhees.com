@@ -1,16 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import {
-	allTags,
-	isoDate,
-	postsWithTag,
-	postUrl,
-	publishedPosts,
-	readableDate,
-	slugify,
-	sortByDateDesc,
-	tagUrl,
-	type PostLike,
-} from "../../src/lib/posts";
+import { allTags, isoDate, type PostLike, postsWithTag, postUrl, publishedPosts, readableDate, slugify, sortByDateDesc, tagUrl } from "../../src/lib/posts";
 
 function post(id: string, date: string, opts: { tags?: string[]; draft?: boolean } = {}): PostLike {
 	return { id, data: { title: id, date: new Date(date), tags: opts.tags ?? [], draft: opts.draft ?? false } };
@@ -48,11 +37,7 @@ describe("slugify", () => {
 });
 
 describe("tags", () => {
-	const posts = [
-		post("a", "2026-01-01", { tags: ["web", "Astro"] }),
-		post("b", "2026-01-02", { tags: ["web"] }),
-		post("c", "2026-01-03"),
-	];
+	const posts = [post("a", "2026-01-01", { tags: ["web", "Astro"] }), post("b", "2026-01-02", { tags: ["web"] }), post("c", "2026-01-03")];
 
 	it("lists each tag once, sorted", () => {
 		expect(allTags(posts)).toEqual(["Astro", "web"]);

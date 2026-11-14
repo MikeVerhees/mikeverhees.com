@@ -1,6 +1,7 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+
 import svelte from "@astrojs/svelte";
+import { defineConfig } from "astro/config";
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
@@ -14,6 +15,9 @@ export default defineConfig({
 	markdown: {
 		shikiConfig: {
 			themes: { light: "github-light", dark: "github-dark" },
+			// Emit --shiki-light/--shiki-dark variables instead of inline colors,
+			// so global.css can switch them with light-dark() (see Tokens there).
+			defaultColor: false,
 		},
 	},
 });

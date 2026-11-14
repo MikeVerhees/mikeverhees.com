@@ -13,7 +13,7 @@ export async function getPaletteItems(): Promise<PaletteItem[]> {
 			group: "writing" as const,
 			url: postUrl(post),
 			hint: readableDate(post.data.date, "month"),
-			keywords: [...post.data.tags, post.data.description ?? ""],
+			keywords: [...post.data.tags, ...(post.data.description ? [post.data.description] : [])],
 		})),
 		{ id: "page:home", title: "Home", group: "pages", url: "/", hint: "~/" },
 		{ id: "page:writing", title: "Writing", group: "pages", url: "/blog/", hint: "~/writing", keywords: ["blog", "archive", "posts"] },

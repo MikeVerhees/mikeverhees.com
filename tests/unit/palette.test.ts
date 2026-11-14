@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { isPaletteShortcut, moveIndex, score, search, type PaletteItem } from "../../src/scripts/palette";
+import { isPaletteShortcut, moveIndex, type PaletteItem, score, search } from "../../src/scripts/palette";
 
 const items: PaletteItem[] = [
 	{ id: "a", title: "Toggle theme", group: "actions", action: "toggle-theme", keywords: ["dark", "light"] },

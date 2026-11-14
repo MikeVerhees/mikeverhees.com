@@ -1,57 +1,32 @@
 /* ==========================================================================
    Tokens
-   Light values on :root. Dark values are repeated in two blocks (system
-   preference unless light was picked, and an explicit dark pick); keep them
-   in sync.
+   Each token is a light-dark() pair, resolved from the used color-scheme:
+   the system preference by default, or the explicit data-theme pick on
+   <html> (see the two rules below). No values are duplicated.
    ========================================================================== */
 :root {
 	--font-sans: -apple-system, system-ui, "Segoe UI", Inter, Roboto, sans-serif;
 	--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
-	--bg: #f4f6fb;
-	--fg: #0f172a;
-	--muted: #4f5868;
-	--accent: #b45309;
-	--accent-2: #c2410c;
-	--card: rgb(255 255 255 / 0.72);
-	--card-solid: #ffffff;
-	--line: rgb(15 23 42 / 0.1);
-	--glow: rgb(251 191 36 / 0.38);
-	--shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
-	--icon-filter: brightness(0);
+	color-scheme: light dark;
+	--bg: light-dark(#f4f6fb, #05080f);
+	--fg: light-dark(#0f172a, #e5e7eb);
+	--muted: light-dark(#4f5868, #9ca3af);
+	--accent: light-dark(#b45309, #fbbf24);
+	--accent-2: light-dark(#c2410c, #f97316);
+	--card: light-dark(rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.04));
+	--card-solid: light-dark(#ffffff, #0b111c);
+	--line: light-dark(rgb(15 23 42 / 0.1), rgb(255 255 255 / 0.09));
+	--glow: light-dark(rgb(251 191 36 / 0.38), rgb(180 83 9 / 0.4));
+	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
+	--shadow: light-dark(var(--shadow-light), none);
+	--icon-filter: light-dark(brightness(0), brightness(0) invert(0.88));
 	--radius: 18px;
-
+}
+:root[data-theme="light"] {
 	color-scheme: light;
 }
-
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme="light"]) {
-		--bg: #05080f;
-		--fg: #e5e7eb;
-		--muted: #9ca3af;
-		--accent: #fbbf24;
-		--accent-2: #f97316;
-		--card: rgb(255 255 255 / 0.04);
-		--card-solid: #0b111c;
-		--line: rgb(255 255 255 / 0.09);
-		--glow: rgb(180 83 9 / 0.4);
-		--shadow: none;
-		--icon-filter: brightness(0) invert(0.88);
-		color-scheme: dark;
-	}
-}
 :root[data-theme="dark"] {
-	--bg: #05080f;
-	--fg: #e5e7eb;
-	--muted: #9ca3af;
-	--accent: #fbbf24;
-	--accent-2: #f97316;
-	--card: rgb(255 255 255 / 0.04);
-	--card-solid: #0b111c;
-	--line: rgb(255 255 255 / 0.09);
-	--glow: rgb(180 83 9 / 0.4);
-	--shadow: none;
-	--icon-filter: brightness(0) invert(0.88);
 	color-scheme: dark;
 }
 
@@ -80,7 +55,9 @@ body {
 	line-height: 1.6;
 	color: var(--fg);
 	/* The orange glow, top-left. */
-	background: radial-gradient(640px 420px at 8% -8%, var(--glow), transparent 70%) no-repeat, var(--bg);
+	background:
+		radial-gradient(640px 420px at 8% -8%, var(--glow), transparent 70%) no-repeat,
+		var(--bg);
 }
 
 a {
@@ -371,7 +348,9 @@ a:hover .icon {
 	border-top: 1px solid var(--line);
 }
 
-/* Syntax highlighting: Shiki emits light colors plus --shiki-dark variables. */
+/* Syntax highlighting: Shiki emits --shiki-light/--shiki-dark variables
+   (defaultColor: false in astro.config.mjs); light-dark() picks per the
+   used color-scheme, like the tokens above. */
 .astro-code {
 	padding: 1em;
 	border-radius: 10px;
@@ -379,17 +358,10 @@ a:hover .icon {
 	font-size: 0.9rem;
 	tab-size: 2;
 }
-:root[data-theme="dark"] .astro-code,
-:root[data-theme="dark"] .astro-code span {
-	color: var(--shiki-dark) !important;
-	background-color: var(--shiki-dark-bg) !important;
-}
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme="light"]) .astro-code,
-	:root:not([data-theme="light"]) .astro-code span {
-		color: var(--shiki-dark) !important;
-		background-color: var(--shiki-dark-bg) !important;
-	}
+.astro-code,
+.astro-code span {
+	color: light-dark(var(--shiki-light), var(--shiki-dark)) !important;
+	background-color: light-dark(var(--shiki-light-bg), var(--shiki-dark-bg)) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

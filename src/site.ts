@@ -3,8 +3,7 @@ export const site = {
 	handle: "~/mikeverhees",
 	url: "https://mikeverhees.com/",
 	language: "en",
-	description:
-		"Mike Verhees is a software developer in Eindhoven building software that is easy to use, secure and privacy-respecting.",
+	description: "Mike Verhees is a software developer in Eindhoven building software that is easy to use, secure and privacy-respecting.",
 	location: "Eindhoven, the Netherlands",
 	author: {
 		name: "Mike Verhees",

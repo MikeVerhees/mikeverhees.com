@@ -12,8 +12,7 @@ plugin({
 			const transpiler = new Bun.Transpiler({ loader: "ts" });
 			const withoutTs = source.replace(
 				/(<script[^>]*lang="ts"[^>]*>)([\s\S]*?)(<\/script>)/,
-				(_, open: string, code: string, close: string) =>
-					open.replace(' lang="ts"', "") + transpiler.transformSync(code) + close,
+				(_, open: string, code: string, close: string) => open.replace(' lang="ts"', "") + transpiler.transformSync(code) + close,
 			);
 			const { js } = compile(withoutTs, { filename: path, generate: "server" });
 			return { contents: js.code, loader: "js" };

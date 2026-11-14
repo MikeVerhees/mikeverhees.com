@@ -1,7 +1,9 @@
 ---
 import "../styles/global.css";
+import CommandPalette from "../components/CommandPalette.svelte";
 import ThemeToggle from "../components/ThemeToggle.svelte";
-import { Content as Footer } from "../partials/footer.md";
+import ContactLinks from "../components/ContactLinks.astro";
+import { getPaletteItems } from "../lib/palette-items";
 import { site } from "../site";
 
 interface Props {
@@ -13,6 +15,7 @@ const { title, description } = Astro.props;
 const pageTitle = title ? `${title} | ${site.title}` : site.title;
 const currentPath = Astro.url.pathname;
 const canonical = new URL(currentPath, Astro.site);
+const paletteItems = await getPaletteItems();
 ---
 
 <!doctype html>
@@ -36,33 +39,36 @@ const canonical = new URL(currentPath, Astro.site);
 		</script>
 	</head>
 	<body>
-		<a href="#skip" class="visually-hidden">Skip to main content</a>
+		<a href="#skip" class="visually-hidden skip-link">Skip to main content</a>
 
-		<header>
-			<a href="/" class="home-link">{site.title}</a>
-			<nav>
-				<h2 class="visually-hidden">Top level navigation menu</h2>
-				<ul class="nav">
-					{
-						site.nav.map((entry) => (
-							<li class="nav-item">
-								<a href={entry.url} aria-current={entry.url === currentPath ? "page" : undefined}>
-									{entry.title}
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</nav>
-			<ThemeToggle client:load />
-		</header>
+		<div class="wrap">
+			<header class="site-header">
+				<a href="/" class="home-link" aria-current={currentPath === "/" ? "page" : undefined}>{site.handle}</a>
+				<nav aria-label="Main">
+					<ul class="site-nav">
+						{
+							site.nav.map((entry) => (
+								<li>
+									<a href={entry.url} aria-current={currentPath.startsWith(entry.url) ? "page" : undefined}>
+										{entry.title}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</nav>
+				<CommandPalette client:idle items={paletteItems} email={site.author.email} />
+				<ThemeToggle client:load />
+			</header>
 
-		<main id="skip">
-			<slot />
-		</main>
+			<main id="skip">
+				<slot />
+			</main>
 
-		<footer>
-			<Footer />
-		</footer>
+			<footer class="site-footer">
+				<span class="mono">© {new Date().getFullYear()} {site.author.name} · static HTML, built with Astro</span>
+				<ContactLinks size={20} />
+			</footer>
+		</div>
 	</body>
 </html>

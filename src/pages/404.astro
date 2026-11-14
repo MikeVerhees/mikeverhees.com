@@ -3,6 +3,9 @@ import Base from "../layouts/Base.astro";
 ---
 
 <Base title="Not found">
-	<h1>Content not found.</h1>
-	<p>Go <a href="/">home</a>.</p>
+	<section class="card prose">
+		<p class="card-label">$ cd {"<somewhere>"}</p>
+		<h1>404: no such file or directory</h1>
+		<p>That page doesn't exist. Go <a href="/">home</a>, browse the <a href="/blog/">writing</a>, or press <kbd class="mono">⌘K</kbd> to search.</p>
+	</section>
 </Base>

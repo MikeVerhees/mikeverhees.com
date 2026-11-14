@@ -9,7 +9,7 @@ async function sitemapPaths(request: import("@playwright/test").APIRequestContex
 
 test("sitemap lists the core pages", async ({ request }) => {
 	const paths = await sitemapPaths(request);
-	expect(paths).toEqual(expect.arrayContaining(["/", "/blog/", "/tags/"]));
+	expect(paths).toEqual(expect.arrayContaining(["/", "/blog/", "/tags/", "/about/"]));
 });
 
 test("every sitemap page loads with a title, heading and no console errors", async ({ page, request }) => {
@@ -26,18 +26,28 @@ test("every sitemap page loads with a title, heading and no console errors", asy
 	expect(errors).toEqual([]);
 });
 
-test("home page shows the about section and contact links", async ({ page }) => {
+test("home page shows the intro, cards and contact links", async ({ page }) => {
 	await page.goto("/");
-	await expect(page.getByRole("heading", { name: "About Me" })).toBeVisible();
-	await expect(page.getByRole("link", { name: "Mail" })).toHaveAttribute("href", "mailto:mail@mikeverhees.com");
-	await expect(page.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/mikeverhees");
-	await expect(page.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+	await expect(page.getByRole("heading", { level: 1 })).toContainText("Software developer");
+	for (const label of ["~/writing", "~/work", "~/stack", "~/contact", "~/terminal"]) {
+		await expect(page.getByRole("heading", { name: label })).toBeVisible();
+	}
+	const contact = page.getByRole("region", { name: "~/contact" });
+	await expect(contact.getByRole("link", { name: "Mail" })).toHaveAttribute("href", "mailto:mail@mikeverhees.com");
+	await expect(contact.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/mikeverhees");
+	await expect(page.getByRole("link", { name: "~/mikeverhees" })).toHaveAttribute("aria-current", "page");
+});
+
+test("about page renders the about text", async ({ page }) => {
+	await page.goto("/about/");
+	await expect(page.getByRole("heading", { name: "About me" })).toBeVisible();
+	await expect(page.getByRole("link", { name: "about" })).toHaveAttribute("aria-current", "page");
 });
 
 test("unknown URLs get the 404 page", async ({ page }) => {
 	const response = await page.goto("/does-not-exist/");
 	expect(response?.status()).toBe(404);
-	await expect(page.getByRole("heading", { name: "Content not found." })).toBeVisible();
+	await expect(page.getByRole("heading", { name: /404/ })).toBeVisible();
 });
 
 test("feeds and robots.txt are served and well-formed", async ({ request }) => {
@@ -55,7 +65,7 @@ test("feeds and robots.txt are served and well-formed", async ({ request }) => {
 	expect(robots).toContain("User-agent: GPTBot");
 });
 
-for (const path of ["/", "/blog/", "/tags/", "/does-not-exist/"]) {
+for (const path of ["/", "/blog/", "/tags/", "/about/", "/does-not-exist/"]) {
 	for (const theme of ["light", "dark"] as const) {
 		test(`no accessibility violations on ${path} (${theme})`, async ({ page }) => {
 			await page.emulateMedia({ colorScheme: theme });

@@ -1,4 +1,4 @@
-# About Me
+# About me
 
 Hi! I'm Mike 👋
 

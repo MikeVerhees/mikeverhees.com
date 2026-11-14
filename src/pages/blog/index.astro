@@ -1,12 +1,18 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PostList from "../../components/PostList.astro";
+import PostLinks from "../../components/PostLinks.astro";
 import { getPosts } from "../../lib/content";
 
 const posts = await getPosts();
 ---
 
-<Base title="Archive">
-	<h1>Archive</h1>
-	{posts.length > 0 ? <PostList posts={posts} /> : <p>No posts yet.</p>}
+<Base title="Writing">
+	<section class="card prose">
+		<p class="card-label">~/writing</p>
+		<h1>Writing</h1>
+		<PostLinks posts={posts} />
+		<p class="muted mono" style="margin-top:24px;font-size:.85rem">
+			Subscribe: <a href="/feed/feed.xml">Atom</a> · <a href="/feed/feed.json">JSON feed</a>
+		</p>
+	</section>
 </Base>

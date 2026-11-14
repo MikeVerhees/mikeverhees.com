@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { isoDate, postUrl, readableDate } from "../lib/posts";
+
+interface Props {
+	posts: CollectionEntry<"blog">[];
+	/** Shown when there are no posts. */
+	empty?: string;
+}
+
+const { posts, empty = "No posts yet. The first one is on its way." } = Astro.props;
+---
+
+{
+	posts.length > 0 ? (
+		<ul class="post-links">
+			{posts.map((post) => (
+				<li>
+					<a href={postUrl(post)}>
+						<span class="post-title">{post.data.title}</span>
+						<small>
+							<time datetime={isoDate(post.data.date)}>{readableDate(post.data.date, "month")}</time>
+							{post.data.tags.length > 0 && ` · ${post.data.tags.map((t) => `#${t}`).join(" ")}`}
+						</small>
+					</a>
+				</li>
+			))}
+		</ul>
+	) : (
+		<p class="muted">{empty}</p>
+	)
+}

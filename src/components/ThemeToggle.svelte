@@ -3,6 +3,7 @@
 	// The server-rendered button stays hidden until hydration, so visitors
 	// without JavaScript simply get their system color scheme.
 	import { onMount } from "svelte";
+	import { EVENTS } from "../scripts/events";
 	import { currentTheme, nextTheme, STORAGE_KEY, type Theme } from "../scripts/theme";
 
 	let ready = $state(false);
@@ -28,24 +29,16 @@
 		sync();
 		ready = true;
 		media.addEventListener("change", sync);
-		return () => media.removeEventListener("change", sync);
+		// Other islands (command palette, terminal) can ask for a toggle.
+		window.addEventListener(EVENTS.toggleTheme, toggle);
+		return () => {
+			media.removeEventListener("change", sync);
+			window.removeEventListener(EVENTS.toggleTheme, toggle);
+		};
 	});
 </script>
 
-<button type="button" class="theme-toggle" hidden={!ready} aria-pressed={theme === "dark"} onclick={toggle}>
+<button type="button" class="chip theme-toggle" hidden={!ready} aria-pressed={theme === "dark"} onclick={toggle}>
 	<span class="visually-hidden">Dark theme</span>
 	<span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
 </button>
-
-<style>
-	.theme-toggle {
-		margin-left: auto;
-		background: none;
-		border: 1px solid var(--color-gray-20);
-		border-radius: 999px;
-		color: inherit;
-		cursor: pointer;
-		font: inherit;
-		padding: 0.25em 0.6em;
-	}
-</style>

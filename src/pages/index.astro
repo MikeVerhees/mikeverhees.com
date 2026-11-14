@@ -1,33 +1,68 @@
 ---
 import Base from "../layouts/Base.astro";
-import PostList from "../components/PostList.astro";
-import { Content as About } from "../partials/about.md";
+import Cat from "../components/Cat.svelte";
+import ContactLinks from "../components/ContactLinks.astro";
+import PostLinks from "../components/PostLinks.astro";
+import Terminal from "../components/Terminal.svelte";
 import { getPosts } from "../lib/content";
+import { isoDate, postUrl } from "../lib/posts";
+import { site } from "../site";
 
-const LATEST = 3;
 const posts = await getPosts();
-const latest = posts.slice(0, LATEST);
-const more = posts.length - latest.length;
+const terminalContext = {
+	posts: posts.map((post) => ({ slug: post.id, title: post.data.title, url: postUrl(post), date: isoDate(post.data.date) })),
+	stack: site.stack,
+	links: site.links,
+	location: site.location,
+};
 ---
 
 <Base>
-	<About />
+	<div class="grid">
+		<section class="card hero span-3" aria-labelledby="hero-title">
+			<p class="card-label">$ whoami</p>
+			<h1 id="hero-title">
+				Software developer building tools that are <span class="accent-text">easy, secure and private.</span>
+			</h1>
+			<p>{site.author.name} · {site.location}.</p>
+		</section>
 
-	{
-		latest.length > 0 && (
-			<>
-				<h1>
-					Latest {latest.length} Post{latest.length !== 1 && "s"}
-				</h1>
-				<PostList posts={latest} startFrom={posts.length} />
-			</>
-		)
-	}
-	{
-		more > 0 && (
-			<p>
-				{more} more post{more !== 1 && "s"} can be found in <a href="/blog/">the archive</a>.
+		<section class="card" id="cat" aria-label="Cat">
+			<h2 class="card-label">~/cat</h2>
+			<Cat client:visible />
+		</section>
+
+		<section class="card span-2 row-2" aria-labelledby="writing-title">
+			<h2 class="card-label" id="writing-title">~/writing</h2>
+			<PostLinks posts={posts.slice(0, 5)} />
+			<p class="mono" style="margin:12px 0 0;font-size:.85rem">
+				{posts.length > 5 && <><a href="/blog/">all {posts.length} posts →</a> · </>}
+				<a href="/feed/feed.xml">subscribe via feed</a>
 			</p>
-		)
-	}
+		</section>
+
+		<section class="card span-2" aria-labelledby="work-title">
+			<h2 class="card-label" id="work-title">~/work</h2>
+			<p class="muted" style="margin:0">
+				I work at <a href="https://www.orcagroup.com/">OrcaGroup</a> on critical communication software for alarming and
+				incident notification. Before that I built software at <a href="https://www.wemaron.nl/">WeMaron</a> to combat social
+				isolation and promote sustainability. <a href="/about/">More about me →</a>
+			</p>
+		</section>
+
+		<section class="card" aria-labelledby="stack-title">
+			<h2 class="card-label" id="stack-title">~/stack</h2>
+			<ul class="pills">{site.stack.map((item) => <li>{item}</li>)}</ul>
+		</section>
+
+		<section class="card" aria-labelledby="contact-title">
+			<h2 class="card-label" id="contact-title">~/contact</h2>
+			<ContactLinks />
+		</section>
+
+		<section class="card span-4" aria-labelledby="terminal-title">
+			<h2 class="card-label" id="terminal-title">~/terminal</h2>
+			<Terminal client:visible context={terminalContext} />
+		</section>
+	</div>
 </Base>

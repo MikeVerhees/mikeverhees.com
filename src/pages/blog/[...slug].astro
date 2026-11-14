@@ -18,37 +18,38 @@ const { Content } = await render(post);
 ---
 
 <Base title={post.data.title} description={post.data.description}>
-	<h1>{post.data.title}</h1>
+	<article class="card prose">
+		<p class="card-label">~/writing/{post.id}</p>
+		<h1>{post.data.title}</h1>
 
-	<ul class="post-metadata">
-		<li><time datetime={isoDate(post.data.date)}>{readableDate(post.data.date)}</time></li>
+		<ul class="post-meta">
+			<li><time datetime={isoDate(post.data.date)}>{readableDate(post.data.date)}</time></li>
+			{
+				post.data.tags.map((tag) => (
+					<li>
+						<a href={tagUrl(tag)}>#{tag}</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<Content />
+
 		{
-			post.data.tags.map((tag) => (
-				<li>
-					<a href={tagUrl(tag)} class="post-tag">
-						{tag}
-					</a>
-				</li>
-			))
+			(older || newer) && (
+				<ul class="links-nextprev">
+					{older && (
+						<li>
+							Previous: <a href={postUrl(older)}>{older.data.title}</a>
+						</li>
+					)}
+					{newer && (
+						<li>
+							Next: <a href={postUrl(newer)}>{newer.data.title}</a>
+						</li>
+					)}
+				</ul>
+			)
 		}
-	</ul>
-
-	<Content />
-
-	{
-		(older || newer) && (
-			<ul class="links-nextprev">
-				{older && (
-					<li>
-						Previous: <a href={postUrl(older)}>{older.data.title}</a>
-					</li>
-				)}
-				{newer && (
-					<li>
-						Next: <a href={postUrl(newer)}>{newer.data.title}</a>
-					</li>
-				)}
-			</ul>
-		)
-	}
+	</article>
 </Base>

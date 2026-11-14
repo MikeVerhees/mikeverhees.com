@@ -35,7 +35,9 @@ test.describe("without JavaScript", () => {
 
 	test("the site still renders and the toggle stays hidden", async ({ page }) => {
 		await page.goto("/");
-		await expect(page.getByRole("heading", { name: "About Me" })).toBeVisible();
+		await expect(page.getByRole("heading", { level: 1 })).toContainText("Software developer");
 		await expect(page.locator(".theme-toggle")).toBeHidden();
+		await expect(page.locator(".search")).toBeHidden();
+		await expect(page.getByRole("textbox", { name: "Terminal command" })).toBeDisabled();
 	});
 });

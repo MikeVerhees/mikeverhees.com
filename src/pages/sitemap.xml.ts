@@ -10,6 +10,7 @@ export const GET: APIRoute = async () => {
 		{ path: "/", lastmod: posts[0]?.data.date },
 		{ path: "/blog/", lastmod: posts[0]?.data.date },
 		{ path: "/tags/" },
+		{ path: "/about/" },
 		...posts.map((post) => ({ path: postUrl(post), lastmod: post.data.date })),
 		...allTags(posts).map((tag) => ({ path: tagUrl(tag) })),
 	];

@@ -4,11 +4,12 @@
 	"language": "en",
 	"home_page_url": "https://mikeverhees.com/",
 	"feed_url": "https://mikeverhees.com/feed/feed.json",
-	"description": "My personal website, first blog post in: -2,147,483,648 days.",
-	"author": {
-		"name": "Mike Verhees",
-		"url": "https://mikeverhees.com/"
-	},
-	"items": [
-	]
+	"description": "Mike Verhees is a software developer in Eindhoven building software that is easy to use, secure and privacy-respecting.",
+	"authors": [
+		{
+			"name": "Mike Verhees",
+			"url": "https://mikeverhees.com/"
+		}
+	],
+	"items": []
 }

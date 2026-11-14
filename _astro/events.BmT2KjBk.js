@@ -1,0 +1,1 @@
+typeof window<`u`&&((window.__svelte??={}).v??=new Set).add(`5`);var e={toggleTheme:`site:toggle-theme`,petCat:`site:pet-cat`,openPalette:`site:open-palette`};function t(e){window.dispatchEvent(new CustomEvent(e))}export{t as n,e as t};

@@ -27,18 +27,9 @@ const terminalContext = {
 			<p>{site.author.name} · {site.location}.</p>
 		</section>
 
-		<section class="card" id="cat" aria-label="Cat">
-			<h2 class="card-label">~/cat</h2>
-			<Cat client:visible />
-		</section>
-
-		<section class="card span-2 row-2" aria-labelledby="writing-title">
-			<h2 class="card-label" id="writing-title">~/writing</h2>
-			<PostLinks posts={posts.slice(0, 5)} />
-			<p class="mono" style="margin:12px 0 0;font-size:.85rem">
-				{posts.length > 5 && <><a href="/blog/">all {posts.length} posts →</a> · </>}
-				<a href="/feed/feed.xml">subscribe via feed</a>
-			</p>
+		<section class="card" aria-labelledby="stack-title">
+			<h2 class="card-label" id="stack-title">~/stack</h2>
+			<ul class="pills">{site.stack.map((item) => <li>{item}</li>)}</ul>
 		</section>
 
 		<section class="card span-2" aria-labelledby="work-title">
@@ -50,12 +41,16 @@ const terminalContext = {
 			</p>
 		</section>
 
-		<section class="card" aria-labelledby="stack-title">
-			<h2 class="card-label" id="stack-title">~/stack</h2>
-			<ul class="pills">{site.stack.map((item) => <li>{item}</li>)}</ul>
+		<section class="card span-2 row-2" aria-labelledby="writing-title">
+			<h2 class="card-label" id="writing-title">~/writing</h2>
+			<PostLinks posts={posts.slice(0, 5)} />
+			<p class="mono" style="margin:12px 0 0;font-size:.85rem">
+				{posts.length > 5 && <><a href="/blog/">all {posts.length} posts →</a> · </>}
+				<a href="/feed/feed.xml">subscribe via feed</a>
+			</p>
 		</section>
 
-		<section class="card" aria-labelledby="contact-title">
+		<section class="card span-2" aria-labelledby="contact-title">
 			<h2 class="card-label" id="contact-title">~/contact</h2>
 			<ContactLinks />
 		</section>
@@ -63,6 +58,11 @@ const terminalContext = {
 		<section class="card span-4" aria-labelledby="terminal-title">
 			<h2 class="card-label" id="terminal-title">~/terminal</h2>
 			<Terminal client:visible context={terminalContext} />
+		</section>
+
+		<section class="card span-4" id="cat" aria-label="Cat">
+			<h2 class="card-label">~/cat</h2>
+			<Cat client:visible />
 		</section>
 	</div>
 </Base>

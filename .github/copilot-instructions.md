@@ -19,7 +19,7 @@ src/pages/          Routes: /, /blog/, /blog/[slug]/, /tags/, /tags/[tag]/, feed
 src/lib/            Pure helpers (posts, feeds) and Astro data access (content.ts)
 src/scripts/        Client-side TypeScript for islands
 src/styles/         global.css with light/dark theme tokens
-tests/unit/         Vitest
+tests/unit/         bun test
 tests/e2e/          Playwright, runs against the built dist/
 ```
 
@@ -27,4 +27,5 @@ tests/e2e/          Playwright, runs against the built dist/
 
 - Put logic in pure functions under `src/lib` or `src/scripts` and unit test it; keep `.astro` files thin.
 - Colors are CSS custom properties on `:root`; dark values are set both under `prefers-color-scheme: dark` (unless `data-theme="light"`) and `[data-theme="dark"]`.
-- Every change should pass `npm run check`, `npm test`, `npm run build` and `npm run test:e2e`.
+- Use Bun for everything: `bun install`, `bun run <script>`, `bunx`. Don't add npm/pnpm lockfiles.
+- Every change should pass `bun run check`, `bun run test`, `bun run build` and `bun run test:e2e`.

@@ -11,7 +11,7 @@ const blog = defineCollection({
 		description: z.string().optional(),
 		date: z.coerce.date(),
 		tags: z.array(z.string()).default([]),
-		// Drafts show up with `npm run dev` but are left out of production builds.
+		// Drafts show up with `bun run dev` but are left out of production builds.
 		draft: z.boolean().default(false),
 	}),
 });

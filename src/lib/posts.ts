@@ -1,5 +1,5 @@
 // Pure helpers for working with blog posts. Kept free of Astro imports so they
-// can be unit tested with plain Vitest.
+// can be unit tested with bun test.
 
 export interface PostLike {
 	id: string;

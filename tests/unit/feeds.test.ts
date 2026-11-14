@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { atomFeed, escapeXml, jsonFeed, sitemap, type FeedItem, type FeedSite } from "../../src/lib/feeds";
 
 const site: FeedSite = {

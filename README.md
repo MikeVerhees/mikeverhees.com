@@ -4,13 +4,13 @@ My personal website, built with [Astro](https://astro.build/) as a fully static 
 
 ## Development
 
-Requires Node 22 (see `.nvmrc`).
+Uses [Bun](https://bun.sh/) as package manager, runtime and unit test runner (version pinned in `package.json` under `packageManager`).
 
 ```bash
-npm install
-npm run dev        # dev server at http://localhost:4321, drafts included
-npm run build      # production build to dist/, drafts excluded
-npm run preview    # serve dist/ locally
+bun install
+bun run dev        # dev server at http://localhost:4321, drafts included
+bun run build      # production build to dist/, drafts excluded
+bun run preview    # serve dist/ locally
 ```
 
 ## Writing a post
@@ -38,14 +38,14 @@ Interactive pieces are small web components written in TypeScript. See `src/comp
 ## Tests
 
 ```bash
-npm run check      # type-check .astro and .ts files
-npm test           # Vitest unit tests (tests/unit)
-npm run build && npm run test:e2e   # Playwright end-to-end tests against dist/ (tests/e2e)
+bun run check      # type-check .astro and .ts files
+bun run test       # unit tests with bun test (tests/unit)
+bun run build && bun run test:e2e   # Playwright end-to-end tests against dist/ (tests/e2e)
 ```
 
-The first time, install the Playwright browser with `npx playwright install chromium`.
+The first time, install the Playwright browser with `bunx playwright install chromium`.
 
-- **Unit tests** cover helpers (`src/lib`), feed and sitemap output, theme logic, and components rendered with Astro's Container API.
+- **Unit tests** (`bun test`) cover helpers (`src/lib`), feed and sitemap output, and theme logic. Keep logic in plain TypeScript modules so it can be tested this way; `.astro` components are covered by the end-to-end tests.
 - **End-to-end tests** load every page in the sitemap, check feeds and the 404 page, run an axe accessibility check in light and dark mode, and test the theme toggle with and without JavaScript, on desktop and mobile viewports.
 
 ## Deployment

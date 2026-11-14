@@ -6,7 +6,7 @@ tags: [meta]
 draft: true
 ---
 
-This post is a **draft**, so it only shows up when running `npm run dev`.
+This post is a **draft**, so it only shows up when running `bun run dev`.
 
 To publish a new post:
 

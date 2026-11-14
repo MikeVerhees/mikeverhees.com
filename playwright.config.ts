@@ -21,7 +21,7 @@ export default defineConfig({
 	],
 	webServer: {
 		// --ignore-lock keeps the server in the foreground (Astro backgrounds it when run by a coding agent).
-		command: `npx astro preview --port ${PORT} --ignore-lock`,
+		command: `bunx --bun astro preview --port ${PORT} --ignore-lock`,
 		url: `http://localhost:${PORT}`,
 		reuseExistingServer: !process.env.CI,
 	},

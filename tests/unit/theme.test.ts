@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { currentTheme, nextTheme } from "../../src/scripts/theme";
 
 const root = (theme?: string) => ({ dataset: theme ? { theme } : {} }) as unknown as HTMLElement;

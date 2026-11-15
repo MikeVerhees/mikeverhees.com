@@ -1,5 +1,5 @@
 <script lang="ts">
-	// Svelte island (client:visible). An ASCII cat that naps and wakes up when
+	// Svelte island (client:load). An ASCII cat that naps and wakes up when
 	// petted: by clicking it, from the command palette, or with `pet` in the terminal.
 	import { onMount } from "svelte";
 	import { EVENTS } from "../scripts/events";

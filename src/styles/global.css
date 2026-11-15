@@ -1,8 +1,10 @@
 /* ==========================================================================
    Tokens
-   Each token is a light-dark() pair, resolved from the used color-scheme:
+   Color tokens are light-dark() pairs, resolved from the used color-scheme:
    the system preference by default, or the explicit data-theme pick on
-   <html> (see the two rules below). No values are duplicated.
+   <html> (see the rules below). The icon filter is not a color, so
+   light-dark() cannot be used for it; the same rules pick it instead.
+   No values are duplicated.
    ========================================================================== */
 :root {
 	--font-sans: -apple-system, system-ui, "Segoe UI", Inter, Roboto, sans-serif;
@@ -20,14 +22,23 @@
 	--glow: light-dark(rgb(251 191 36 / 0.38), rgb(180 83 9 / 0.4));
 	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
 	--shadow: light-dark(var(--shadow-light), none);
-	--icon-filter: light-dark(brightness(0), brightness(0) invert(0.88));
+	--icon-filter-light: brightness(0);
+	--icon-filter-dark: brightness(0) invert(0.88);
+	--icon-filter: var(--icon-filter-light);
 	--radius: 18px;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme]) {
+		--icon-filter: var(--icon-filter-dark);
+	}
 }
 :root[data-theme="light"] {
 	color-scheme: light;
+	--icon-filter: var(--icon-filter-light);
 }
 :root[data-theme="dark"] {
 	color-scheme: dark;
+	--icon-filter: var(--icon-filter-dark);
 }
 
 /* ==========================================================================

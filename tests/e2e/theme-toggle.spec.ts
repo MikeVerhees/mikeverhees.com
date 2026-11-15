@@ -18,6 +18,24 @@ test("toggle switches theme and remembers the choice", async ({ page }) => {
 	await expect(page.getByRole("button", { name: "Dark theme" })).toHaveAttribute("aria-pressed", "true");
 });
 
+test("contact icons get a theme-aware filter in both color schemes", async ({ page }) => {
+	const iconFilter = () => page.evaluate(() => getComputedStyle(document.querySelector(".icon") as HTMLElement).filter);
+
+	await page.emulateMedia({ colorScheme: "light" });
+	await page.goto("/");
+	expect(await iconFilter()).toContain("brightness(0)");
+	expect(await iconFilter()).not.toContain("invert");
+
+	await page.emulateMedia({ colorScheme: "dark" });
+	await page.goto("/");
+	expect(await iconFilter()).toContain("brightness(0) invert(0.88)");
+
+	// An explicit choice overrides the system preference.
+	await page.getByRole("button", { name: "Dark theme" }).click();
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+	expect(await iconFilter()).not.toContain("invert");
+});
+
 test("an explicit light choice wins over a dark system preference", async ({ page }) => {
 	await page.emulateMedia({ colorScheme: "dark" });
 	await page.goto("/");

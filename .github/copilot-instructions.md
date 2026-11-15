@@ -7,6 +7,7 @@ Personal website and blog for Mike Verhees, built with Astro as a fully static s
 - The site must stay static (`output: "static"`). No server runtime, SSR adapter or API routes that need a server.
 - JavaScript only for interactivity, as Svelte 5 islands (`.svelte` in src/components, used with a `client:*` directive). Prefer `client:visible`/`client:idle` over `client:load` when the island isn't needed immediately.
 - Keep the AI-crawler rules in `public/robots.txt`.
+- No screenshot-based visual regression tests: don't add `toHaveScreenshot` or committed image snapshots. For a visual change, attach before/after screenshots to the PR description instead (see `.github/PULL_REQUEST_TEMPLATE.md`).
 
 ## Layout
 

@@ -20,7 +20,7 @@ src/lib/            Pure helpers (posts, feeds) and Astro data access (content.t
 src/scripts/        Client-side TypeScript for islands
 src/styles/         global.css with light/dark theme tokens
 tests/unit/         bun test
-tests/e2e/          Playwright, runs against the built dist/
+tests/e2e/          Playwright against the built dist/, incl. screenshot baselines (tests/e2e/*.spec.ts-snapshots/, Linux only) for visual regression
 ```
 
 ## Conventions

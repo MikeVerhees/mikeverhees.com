@@ -9,11 +9,17 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
-	reporter: process.env.CI ? [["github"], ["list"]] : "list",
+	reporter: process.env.CI ? [["github"], ["list"], ["html", { open: "never" }]] : "list",
+	expect: {
+		toHaveScreenshot: { animations: "disabled", caret: "hide" },
+	},
 	use: {
 		baseURL: `http://localhost:${PORT}`,
 		trace: "off",
-		launchOptions: process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {},
+		launchOptions: {
+			...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
+			args: ["--disable-gpu", "--force-color-profile=srgb", "--font-render-hinting=none"],
+		},
 	},
 	projects: [
 		{ name: "desktop", use: { ...devices["Desktop Chrome"] } },

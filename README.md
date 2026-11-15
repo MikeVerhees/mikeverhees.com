@@ -59,6 +59,7 @@ The first time, install the Playwright browser with `bunx playwright install chr
 
 - **Unit tests** (`bun test`) cover helpers (`src/lib`), feed and sitemap output, theme logic, and Svelte components rendered with `svelte/server` (`.svelte` imports are compiled by `tests/support/svelte-plugin.ts`, preloaded via `bunfig.toml`). `.astro` components are covered by the end-to-end tests.
 - **End-to-end tests** load every page in the sitemap, check feeds and the 404 page, run an axe accessibility check in light and dark mode, and test the theme toggle with and without JavaScript, on desktop and mobile viewports.
+- **Visual regression** (`tests/e2e/screenshots.spec.ts`) takes full-page screenshots of the core pages in light and dark mode on desktop and mobile, compared against the committed baselines in `tests/e2e/screenshots.spec.ts-snapshots/`. On a visual change the test fails and CI uploads a `playwright-report` artifact containing the expected, actual and diff images. After an intentional visual change, regenerate the baselines with `bunx playwright test --update-snapshots` and commit them, so the PR diff shows the changed screenshots. Baselines are per-platform; only the `-linux` ones (the CI platform) are committed.
 
 ## Deployment
 

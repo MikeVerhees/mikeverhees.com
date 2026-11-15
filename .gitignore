@@ -8,3 +8,8 @@ node_modules/
 # test output
 test-results/
 playwright-report/
+
+# screenshot baselines are committed for Linux (the CI platform); local
+# snapshots from other platforms are not committed
+tests/e2e/*.spec.ts-snapshots/*-darwin.png
+tests/e2e/*.spec.ts-snapshots/*-win32.png

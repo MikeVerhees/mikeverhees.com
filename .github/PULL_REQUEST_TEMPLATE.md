@@ -7,7 +7,6 @@
 ## Checklist
 
 - [ ] `bun run lint`, `bun run check`, `bun run test`, `bun run build` and `bun run test:e2e` pass
-- [ ] No screenshot-based regression tests added (no `toHaveScreenshot`, no committed image snapshots) — visual review happens via screenshots in this PR description, not in CI
 
 ## Screenshots (required when the PR changes how the site looks)
 

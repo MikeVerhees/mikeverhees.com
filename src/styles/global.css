@@ -14,12 +14,12 @@
 	--bg: light-dark(#f4f6fb, #05080f);
 	--fg: light-dark(#0f172a, #e5e7eb);
 	--muted: light-dark(#4f5868, #9ca3af);
-	--accent: light-dark(#b45309, #fbbf24);
-	--accent-2: light-dark(#c2410c, #f97316);
+	--accent: light-dark(#ff8c00, #fbbf24);
+	--accent-2: light-dark(#ff6347, #f97316);
 	--card: light-dark(rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.04));
 	--card-solid: light-dark(#ffffff, #0b111c);
 	--line: light-dark(rgb(15 23 42 / 0.1), rgb(255 255 255 / 0.09));
-	--glow: light-dark(rgb(251 191 36 / 0.55), rgb(180 83 9 / 0.6));
+	--glow: light-dark(rgb(255 200 0 / 0.55), rgb(255 170 0 / 0.6));
 	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
 	--shadow: light-dark(var(--shadow-light), none);
 	--icon-filter-light: brightness(0);

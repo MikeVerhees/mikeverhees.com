@@ -78,9 +78,9 @@ body {
 			var(--sunset-orange) 0%,
 			var(--sunset-orange) 15%,
 			var(--sunset-orange-pink) 25%,
-			var(--sunset-pink-blue) 45%,
-			var(--sunset-blue) 65%,
-			var(--sunset-blue-deep) 85%,
+			var(--sunset-pink-blue) 40%,
+			var(--sunset-blue) 55%,
+			var(--sunset-blue-deep) 70%,
 			var(--sunset-dark-blue) 100%
 		),
 		/* Sun glow effect - positioned near horizon on the right */

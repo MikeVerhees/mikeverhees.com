@@ -71,21 +71,15 @@ body {
 	font-family: var(--font-sans);
 	line-height: 1.6;
 	color: var(--fg);
-	/* Complex sunset gradient background with multiple color bands and sun glow */
+	/* Smooth sunset gradient background with sun glow */
 	background:
-		/* Base: dark landscape at bottom */
+		/* Smooth multi-color sunset gradient */
 		linear-gradient(to bottom,
 			var(--sunset-blue-dark) 0%,
-			var(--sunset-blue-dark) 15%,
-			var(--sunset-blue-light) 15%,
-			var(--sunset-blue-light) 30%,
-			var(--sunset-pink) 30%,
-			var(--sunset-pink) 45%,
-			var(--sunset-orange) 45%,
-			var(--sunset-orange) 65%,
-			var(--sunset-red) 65%,
+			var(--sunset-blue-light) 20%,
+			var(--sunset-pink) 40%,
+			var(--sunset-orange) 60%,
 			var(--sunset-red) 80%,
-			var(--sunset-dark) 80%,
 			var(--sunset-dark) 100%
 		),
 		/* Sun glow effect - positioned near horizon on the right */

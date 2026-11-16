@@ -22,10 +22,12 @@
 	--glow: light-dark(rgb(255 215 0 / 0.7), rgb(255 180 0 / 0.8));
 	--sunset-orange: light-dark(rgb(255 140 40), rgb(255 160 60));
 	--sunset-orange-pink: light-dark(rgb(255 100 80), rgb(255 120 100));
-	--sunset-pink-blue: light-dark(rgb(255 140 160), rgb(220 100 140));
+	--sunset-pink-blue: light-dark(rgb(255 140 160), rgb(240 120 150));
 	--sunset-blue: light-dark(rgb(100 140 200), rgb(80 120 180));
-	--sunset-blue-deep: light-dark(rgb(40 60 120), rgb(20 40 80));
-	--sunset-dark-blue: light-dark(rgb(10 20 50), rgb(5 10 30));
+	--sunset-deep-blue: light-dark(rgb(40 60 120), rgb(20 40 80));
+	--sunset-deep-dark-blue: light-dark(rgb(10 20 50), rgb(5 10 30));
+	--sunset-even-darker: light-dark(rgb(5 10 30), rgb(2 5 15));
+	--sunset-almost-black: light-dark(rgb(2 2 10), rgb(0 0 5));
 	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
 	--shadow: light-dark(var(--shadow-light), none);
 	--icon-filter-light: brightness(0);
@@ -71,17 +73,19 @@ body {
 	font-family: var(--font-sans);
 	line-height: 1.6;
 	color: var(--fg);
-	/* Smooth sunset gradient: orange at top, blue at bottom */
+	/* Smooth sunset gradient: orange at top, transitioning to almost black */
 	background:
-		/* Smooth gradient from orange to deep blue */
+		/* Smooth gradient from orange to almost black */
 		linear-gradient(to bottom,
 			var(--sunset-orange) 0%,
-			var(--sunset-orange) 15%,
-			var(--sunset-orange-pink) 25%,
-			var(--sunset-pink-blue) 40%,
-			var(--sunset-blue) 55%,
-			var(--sunset-blue-deep) 70%,
-			var(--sunset-dark-blue) 100%
+			var(--sunset-orange) 10%,
+			var(--sunset-orange-pink) 15%,
+			var(--sunset-pink-blue) 20%,
+			var(--sunset-blue) 30%,
+			var(--sunset-deep-blue) 40%,
+			var(--sunset-deep-dark-blue) 55%,
+			var(--sunset-even-darker) 80%,
+			var(--sunset-almost-black) 100%
 		),
 		/* Sun glow effect - positioned near horizon on the right */
 		radial-gradient(600px 400px at 80% 30%, var(--glow), transparent 60%) no-repeat,

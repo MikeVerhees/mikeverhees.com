@@ -19,8 +19,13 @@
 	--card: light-dark(rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.04));
 	--card-solid: light-dark(#ffffff, #0b111c);
 	--line: light-dark(rgb(15 23 42 / 0.1), rgb(255 255 255 / 0.09));
-	--glow: light-dark(rgb(255 120 80 / 0.55), rgb(255 80 40 / 0.6));
-	--sunset-start: light-dark(rgb(255 200 180 / 0.8), rgb(60 20 20 / 0.8));
+	--glow: light-dark(rgb(255 215 0 / 0.7), rgb(255 180 0 / 0.8));
+	--sunset-blue-dark: light-dark(rgb(20 40 80), rgb(15 30 60));
+	--sunset-blue-light: light-dark(rgb(100 140 200), rgb(40 70 100));
+	--sunset-pink: light-dark(rgb(255 200 200), rgb(240 150 160));
+	--sunset-orange: light-dark(rgb(255 165 42), rgb(240 120 50));
+	--sunset-red: light-dark(rgb(255 69 0), rgb(230 60 20));
+	--sunset-dark: light-dark(rgb(80 40 20), rgb(30 15 10));
 	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
 	--shadow: light-dark(var(--shadow-light), none);
 	--icon-filter-light: brightness(0);
@@ -66,12 +71,30 @@ body {
 	font-family: var(--font-sans);
 	line-height: 1.6;
 	color: var(--fg);
-	/* Sunset gradient background with radial glow effect */
+	/* Complex sunset gradient background with multiple color bands and sun glow */
 	background:
-		linear-gradient(to bottom, var(--sunset-start), var(--bg) 40%),
+		/* Base: dark landscape at bottom */
+		linear-gradient(to bottom,
+			var(--sunset-blue-dark) 0%,
+			var(--sunset-blue-dark) 15%,
+			var(--sunset-blue-light) 15%,
+			var(--sunset-blue-light) 30%,
+			var(--sunset-pink) 30%,
+			var(--sunset-pink) 45%,
+			var(--sunset-orange) 45%,
+			var(--sunset-orange) 65%,
+			var(--sunset-red) 65%,
+			var(--sunset-red) 80%,
+			var(--sunset-dark) 80%,
+			var(--sunset-dark) 100%
+		),
+		/* Sun glow effect - positioned near horizon on the right */
+		radial-gradient(600px 400px at 80% 70%, var(--glow), transparent 60%) no-repeat,
+		/* Original radial glow for compatibility */
 		radial-gradient(780px 520px at 8% -8%, var(--glow), transparent 70%) no-repeat,
 		var(--bg);
 	background-position: 0 var(--glow-shift, 0px);
+	background-blend-mode: normal, lighten, normal, normal;
 }
 
 a {

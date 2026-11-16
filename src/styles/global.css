@@ -78,17 +78,18 @@ body {
 		/* Smooth gradient from orange to almost black */
 		linear-gradient(to bottom,
 			var(--sunset-orange) 0%,
-			var(--sunset-orange) 10%,
-			var(--sunset-orange-pink) 15%,
-			var(--sunset-pink-blue) 20%,
-			var(--sunset-blue) 30%,
-			var(--sunset-deep-blue) 40%,
-			var(--sunset-deep-dark-blue) 55%,
-			var(--sunset-even-darker) 80%,
+			var(--sunset-orange) 3%,
+			var(--sunset-orange-pink) 5%,
+			var(--sunset-pink-blue) 8%,
+			var(--sunset-blue) 20%,
+			var(--sunset-deep-blue) 30%,
+			var(--sunset-deep-dark-blue) 40%,
+			var(--sunset-even-darker) 50%,
+			var(--sunset-almost-black) 50%,
 			var(--sunset-almost-black) 100%
 		),
-		/* Sun glow effect - positioned near horizon on the right */
-		radial-gradient(600px 400px at 80% 30%, var(--glow), transparent 60%) no-repeat,
+		/* Sun glow effect - positioned on the left at absolute top */
+		radial-gradient(600px 400px at 10% 0%, var(--glow), transparent 60%) no-repeat,
 		/* Original radial glow for compatibility */
 		radial-gradient(780px 520px at 8% -8%, var(--glow), transparent 70%) no-repeat,
 		var(--bg);

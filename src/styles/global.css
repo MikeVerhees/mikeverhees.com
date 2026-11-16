@@ -20,12 +20,12 @@
 	--card-solid: light-dark(#ffffff, #0b111c);
 	--line: light-dark(rgb(15 23 42 / 0.1), rgb(255 255 255 / 0.09));
 	--glow: light-dark(rgb(255 215 0 / 0.7), rgb(255 180 0 / 0.8));
-	--sunset-blue-dark: light-dark(rgb(20 40 80), rgb(15 30 60));
-	--sunset-blue-light: light-dark(rgb(100 140 200), rgb(40 70 100));
-	--sunset-pink: light-dark(rgb(255 200 200), rgb(240 150 160));
-	--sunset-orange: light-dark(rgb(255 165 42), rgb(240 120 50));
-	--sunset-red: light-dark(rgb(255 69 0), rgb(230 60 20));
-	--sunset-dark: light-dark(rgb(80 40 20), rgb(30 15 10));
+	--sunset-orange: light-dark(rgb(255 140 40), rgb(255 160 60));
+	--sunset-orange-pink: light-dark(rgb(255 100 80), rgb(255 120 100));
+	--sunset-pink-blue: light-dark(rgb(255 140 160), rgb(220 100 140));
+	--sunset-blue: light-dark(rgb(100 140 200), rgb(80 120 180));
+	--sunset-blue-deep: light-dark(rgb(40 60 120), rgb(20 40 80));
+	--sunset-dark-blue: light-dark(rgb(10 20 50), rgb(5 10 30));
 	--shadow-light: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.04);
 	--shadow: light-dark(var(--shadow-light), none);
 	--icon-filter-light: brightness(0);
@@ -71,19 +71,20 @@ body {
 	font-family: var(--font-sans);
 	line-height: 1.6;
 	color: var(--fg);
-	/* Smooth sunset gradient background with sun glow */
+	/* Smooth sunset gradient: orange at top, blue at bottom */
 	background:
-		/* Smooth multi-color sunset gradient */
+		/* Smooth gradient from orange to deep blue */
 		linear-gradient(to bottom,
-			var(--sunset-blue-dark) 0%,
-			var(--sunset-blue-light) 20%,
-			var(--sunset-pink) 40%,
-			var(--sunset-orange) 60%,
-			var(--sunset-red) 80%,
-			var(--sunset-dark) 100%
+			var(--sunset-orange) 0%,
+			var(--sunset-orange) 15%,
+			var(--sunset-orange-pink) 25%,
+			var(--sunset-pink-blue) 45%,
+			var(--sunset-blue) 65%,
+			var(--sunset-blue-deep) 85%,
+			var(--sunset-dark-blue) 100%
 		),
 		/* Sun glow effect - positioned near horizon on the right */
-		radial-gradient(600px 400px at 80% 70%, var(--glow), transparent 60%) no-repeat,
+		radial-gradient(600px 400px at 80% 30%, var(--glow), transparent 60%) no-repeat,
 		/* Original radial glow for compatibility */
 		radial-gradient(780px 520px at 8% -8%, var(--glow), transparent 70%) no-repeat,
 		var(--bg);

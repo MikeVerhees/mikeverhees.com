@@ -52,11 +52,11 @@ test("unknown URLs get the 404 page", async ({ page }) => {
 
 test("feeds and robots.txt are served and well-formed", async ({ request }) => {
 	const atom = await request.get("/feed/feed.xml");
-	expect(atom.ok).toBe(true);
+	expect(atom.ok()).toBe(true);
 	expect(await atom.text()).toMatch(/^<\?xml[\s\S]*<feed xmlns="http:\/\/www.w3.org\/2005\/Atom"[\s\S]*<\/feed>\s*$/);
 
 	const json = await request.get("/feed/feed.json");
-	expect(json.ok).toBe(true);
+	expect(json.ok()).toBe(true);
 	const feed = await json.json();
 	expect(feed.version).toBe("https://jsonfeed.org/version/1.1");
 	expect(Array.isArray(feed.items)).toBe(true);

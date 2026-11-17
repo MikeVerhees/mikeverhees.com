@@ -35,7 +35,7 @@ test("home page shows the intro, cards and footer contact links", async ({ page 
 	const footer = page.getByRole("contentinfo");
 	await expect(footer.getByRole("link", { name: "Mail" })).toHaveAttribute("href", "mailto:mail@mikeverhees.com");
 	await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/mikeverhees");
-	await expect(page.getByRole("link", { name: "~mikeverhees" })).toHaveAttribute("aria-current", "page");
+	await expect(page.getByRole("link", { name: "~/mikeverhees" })).toHaveAttribute("aria-current", "page");
 });
 
 test("about page renders the about text", async ({ page }) => {

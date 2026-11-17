@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import Cat from "../components/Cat.svelte";
-import ContactLinks from "../components/ContactLinks.astro";
 import PostLinks from "../components/PostLinks.astro";
 import Terminal from "../components/Terminal.svelte";
 import { getPosts } from "../lib/content";
@@ -48,11 +47,6 @@ const terminalContext = {
 				{posts.length > 5 && <><a href="/blog/">all {posts.length} posts →</a> · </>}
 				<a href="/feed/feed.xml">subscribe via feed</a>
 			</p>
-		</section>
-
-		<section class="card span-2" aria-labelledby="contact-title">
-			<h2 class="card-label" id="contact-title">~/contact</h2>
-			<ContactLinks />
 		</section>
 
 		<section class="card span-4" aria-labelledby="terminal-title">

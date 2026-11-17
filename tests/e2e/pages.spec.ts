@@ -26,16 +26,16 @@ test("every sitemap page loads with a title, heading and no console errors", asy
 	expect(errors).toEqual([]);
 });
 
-test("home page shows the intro, cards and contact links", async ({ page }) => {
+test("home page shows the intro, cards and footer contact links", async ({ page }) => {
 	await page.goto("/");
 	await expect(page.getByRole("heading", { level: 1 })).toContainText("Software developer");
-	for (const label of ["~/writing", "~/work", "~/stack", "~/contact", "~/terminal"]) {
+	for (const label of ["~/writing", "~/work", "~/stack", "~/terminal"]) {
 		await expect(page.getByRole("heading", { name: label })).toBeVisible();
 	}
-	const contact = page.getByRole("region", { name: "~/contact" });
-	await expect(contact.getByRole("link", { name: "Mail" })).toHaveAttribute("href", "mailto:mail@mikeverhees.com");
-	await expect(contact.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/mikeverhees");
-	await expect(page.getByRole("link", { name: "~/mikeverhees" })).toHaveAttribute("aria-current", "page");
+	const footer = page.getByRole("contentinfo");
+	await expect(footer.getByRole("link", { name: "Mail" })).toHaveAttribute("href", "mailto:mail@mikeverhees.com");
+	await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/mikeverhees");
+	await expect(page.getByRole("link", { name: "~mikeverhees" })).toHaveAttribute("aria-current", "page");
 });
 
 test("about page renders the about text", async ({ page }) => {
@@ -52,11 +52,11 @@ test("unknown URLs get the 404 page", async ({ page }) => {
 
 test("feeds and robots.txt are served and well-formed", async ({ request }) => {
 	const atom = await request.get("/feed/feed.xml");
-	expect(atom.ok()).toBe(true);
+	expect(atom.ok).toBe(true);
 	expect(await atom.text()).toMatch(/^<\?xml[\s\S]*<feed xmlns="http:\/\/www.w3.org\/2005\/Atom"[\s\S]*<\/feed>\s*$/);
 
 	const json = await request.get("/feed/feed.json");
-	expect(json.ok()).toBe(true);
+	expect(json.ok).toBe(true);
 	const feed = await json.json();
 	expect(feed.version).toBe("https://jsonfeed.org/version/1.1");
 	expect(Array.isArray(feed.items)).toBe(true);

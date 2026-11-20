@@ -29,7 +29,7 @@
 		sync();
 		ready = true;
 		media.addEventListener("change", sync);
-		// Other islands (command palette, terminal) can ask for a toggle.
+		// The command palette can also ask for a toggle.
 		window.addEventListener(EVENTS.toggleTheme, toggle);
 		return () => {
 			media.removeEventListener("change", sync);

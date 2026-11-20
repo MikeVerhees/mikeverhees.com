@@ -2,18 +2,10 @@
 import Base from "../layouts/Base.astro";
 import Cat from "../components/Cat.svelte";
 import PostLinks from "../components/PostLinks.astro";
-import Terminal from "../components/Terminal.svelte";
 import { getPosts } from "../lib/content";
-import { isoDate, postUrl } from "../lib/posts";
 import { site } from "../site";
 
 const posts = await getPosts();
-const terminalContext = {
-	posts: posts.map((post) => ({ slug: post.id, title: post.data.title, url: postUrl(post), date: isoDate(post.data.date) })),
-	stack: site.stack,
-	links: site.links,
-	location: site.location,
-};
 ---
 
 <Base>
@@ -40,18 +32,13 @@ const terminalContext = {
 			</p>
 		</section>
 
-		<section class="card span-2 row-2" aria-labelledby="writing-title">
+		<section class="card span-2" aria-labelledby="writing-title">
 			<h2 class="card-label" id="writing-title">~/writing</h2>
 			<PostLinks posts={posts.slice(0, 5)} />
 			<p class="mono" style="margin:12px 0 0;font-size:.85rem">
 				{posts.length > 5 && <><a href="/blog/">all {posts.length} posts →</a> · </>}
 				<a href="/feed/feed.xml">subscribe via feed</a>
 			</p>
-		</section>
-
-		<section class="card span-4" aria-labelledby="terminal-title">
-			<h2 class="card-label" id="terminal-title">~/terminal</h2>
-			<Terminal client:visible context={terminalContext} />
 		</section>
 
 		<section class="card span-4" id="cat" aria-label="Cat">

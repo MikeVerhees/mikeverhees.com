@@ -1,20 +1,10 @@
 import { expect, type Page, test } from "@playwright/test";
 
-const terminalInput = (page: Page) => page.getByRole("textbox", { name: "Terminal command" });
-
 async function openPalette(page: Page) {
 	// The palette hydrates when the browser is idle; wait for its button first.
 	await expect(page.getByRole("button", { name: /search/i })).toBeVisible();
 	await page.keyboard.press("Control+k");
 	await expect(page.getByRole("combobox")).toBeFocused();
-}
-
-async function typeCommand(page: Page, command: string) {
-	const input = terminalInput(page);
-	await input.scrollIntoViewIfNeeded();
-	await expect(input).toBeEnabled();
-	await input.fill(command);
-	await input.press("Enter");
 }
 
 test.describe("command palette", () => {
@@ -75,45 +65,5 @@ test.describe("cat", () => {
 		await expect(status).toContainText("purring");
 		await page.clock.runFor(4000);
 		await expect(status).toContainText("napping");
-	});
-});
-
-test.describe("terminal", () => {
-	test("runs commands and keeps history", async ({ page }) => {
-		await page.goto("/");
-		const log = page.getByRole("log", { name: "Terminal output" });
-
-		await typeCommand(page, "help");
-		await expect(log).toContainText("pet the cat");
-
-		await typeCommand(page, "stack");
-		await expect(log).toContainText("TypeScript · JavaScript");
-
-		await typeCommand(page, "nonsense");
-		await expect(log).toContainText("command not found: nonsense");
-
-		await terminalInput(page).press("ArrowUp");
-		await expect(terminalInput(page)).toHaveValue("nonsense");
-
-		await typeCommand(page, "clear");
-		await expect(log).not.toContainText("command not found");
-	});
-
-	test("tab completes and pets the cat", async ({ page }) => {
-		await page.goto("/");
-		const input = terminalInput(page);
-		await input.scrollIntoViewIfNeeded();
-		await expect(input).toBeEnabled();
-		await input.fill("pe");
-		await input.press("Tab");
-		await expect(input).toHaveValue("pet ");
-		await input.press("Enter");
-		await expect(page.locator("#cat-status")).toContainText("purring");
-	});
-
-	test("navigates with open", async ({ page }) => {
-		await page.goto("/");
-		await typeCommand(page, "open writing");
-		await expect(page).toHaveURL(/\/blog\/$/);
 	});
 });

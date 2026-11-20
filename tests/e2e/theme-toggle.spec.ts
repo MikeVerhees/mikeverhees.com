@@ -56,6 +56,5 @@ test.describe("without JavaScript", () => {
 		await expect(page.getByRole("heading", { level: 1 })).toContainText("Software developer");
 		await expect(page.locator(".theme-toggle")).toBeHidden();
 		await expect(page.locator(".search")).toBeHidden();
-		await expect(page.getByRole("textbox", { name: "Terminal command" })).toBeDisabled();
 	});
 });

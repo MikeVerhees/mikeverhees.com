@@ -230,19 +230,14 @@ a:hover .icon {
 .span-4 {
 	grid-column: span 4;
 }
-.row-2 {
-	grid-row: span 2;
-}
 @media (max-width: 760px) {
 	.grid {
 		grid-template-columns: 1fr;
 	}
 	.span-2,
 	.span-3,
-	.span-4,
-	.row-2 {
+	.span-4 {
 		grid-column: auto;
-		grid-row: auto;
 	}
 }
 

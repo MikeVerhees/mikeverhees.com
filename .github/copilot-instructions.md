@@ -15,7 +15,7 @@ Personal website and blog for Mike Verhees, built with Astro as a fully static s
 src/content/blog/   Blog posts (Markdown); schema in src/content.config.ts
 src/partials/       About and footer Markdown, rendered on every page / home
 src/layouts/        Base.astro (html shell, header, nav, footer)
-src/components/     PostLinks.astro, ContactLinks.astro, and Svelte islands (ThemeToggle, CommandPalette, Terminal, Cat)
+src/components/     PostLinks.astro, ContactLinks.astro, and Svelte islands (ThemeToggle, CommandPalette, Cat)
 src/pages/          Routes: /, /blog/, /blog/[slug]/, /tags/, /tags/[tag]/, feeds, sitemap, 404
 src/lib/            Pure helpers (posts, feeds) and Astro data access (content.ts)
 src/scripts/        Client-side TypeScript for islands

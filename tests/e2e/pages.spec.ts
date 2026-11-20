@@ -29,7 +29,7 @@ test("every sitemap page loads with a title, heading and no console errors", asy
 test("home page shows the intro, cards and footer contact links", async ({ page }) => {
 	await page.goto("/");
 	await expect(page.getByRole("heading", { level: 1 })).toContainText("Software developer");
-	for (const label of ["~/writing", "~/work", "~/stack", "~/terminal"]) {
+	for (const label of ["~/writing", "~/work", "~/stack"]) {
 		await expect(page.getByRole("heading", { name: label })).toBeVisible();
 	}
 	const footer = page.getByRole("contentinfo");

@@ -15,7 +15,7 @@ export const site = {
 		{ title: "tags", url: "/tags/" },
 		{ title: "about", url: "/about/" },
 	],
-	// Skills shown in the ~/stack card and by the terminal `stack` command.
+	// Skills shown in the ~/stack card.
 	stack: ["TypeScript", "JavaScript", "Node.js", "Bun", "React", "Astro", "Svelte", "PostgreSQL", "MongoDB", "GitHub Actions"],
 	links: {
 		mail: "mailto:mail@mikeverhees.com",

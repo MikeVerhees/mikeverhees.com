@@ -43,6 +43,7 @@ class DependencyChange(BaseModel):
 class CheckResult(BaseModel):
     name: str
     passed: bool
+    output: str = ""
 
 
 class PrepareInput(BaseModel):
@@ -120,7 +121,7 @@ async def _run(cmd: list[str], cwd: Path, env: dict[str, str] | None = None, tim
     return proc.returncode
 
 
-async def _run_check(cmd: list[str], cwd: Path, timeout: int) -> bool:
+async def _run_check(cmd: list[str], cwd: Path, timeout: int) -> tuple[bool, str]:
     proc = await asyncio.create_subprocess_exec(
         *cmd,
         cwd=cwd,
@@ -128,12 +129,13 @@ async def _run_check(cmd: list[str], cwd: Path, timeout: int) -> bool:
         stderr=asyncio.subprocess.STDOUT,
     )
     try:
-        await asyncio.wait_for(proc.communicate(), timeout=timeout)
+        out, _ = await asyncio.wait_for(proc.communicate(), timeout=timeout)
     except TimeoutError:
         proc.kill()
         await proc.wait()
-        return False
-    return proc.returncode == 0
+        return False, f"timed out after {timeout}s"
+    output = (out or b"").decode(errors="replace")
+    return proc.returncode == 0, "" if proc.returncode == 0 else output[-2000:]
 
 
 def _diff_dependencies(before: dict, after: dict) -> list[DependencyChange]:
@@ -163,6 +165,11 @@ def _pr_body(args: PullRequestInput) -> str:
     for check in args.checks:
         mark = "x" if check.passed else " "
         lines.append(f"- [{mark}] `bun run {check.name}`")
+    failed = [c for c in args.checks if not c.passed]
+    if failed:
+        lines += ["", "## Failed check output", ""]
+        for check in failed:
+            lines += ["<details>", f"<summary><code>bun run {check.name}</code> — failed</summary>", "", "```", check.output, "```", "", "</details>", ""]
     lines += [
         "",
         "<!-- e2e tests run in CI on this PR -->",
@@ -186,8 +193,8 @@ async def prepare_dependency_update(args: PrepareInput) -> PrepareResult:
 
     checks: list[CheckResult] = []
     for name in CHECKS:
-        passed = await _run_check(["bun", "run", name], cwd=workdir, timeout=CHECK_TIMEOUT_SECONDS)
-        checks.append(CheckResult(name=name, passed=passed))
+        passed, output = await _run_check(["bun", "run", name], cwd=workdir, timeout=CHECK_TIMEOUT_SECONDS)
+        checks.append(CheckResult(name=name, passed=passed, output=output))
 
     if args.dry_run:
         return PrepareResult(branch=None, changes=changes, checks=checks)

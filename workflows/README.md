@@ -10,10 +10,16 @@ see the schedule on the managed deployment):
    user, so user OAuth cannot be used.
 2. Runs `bun update --latest` (latest versions, ignoring package.json ranges, majors
    included) and diffs `package.json`.
-3. Runs `bun run lint`, `bun run check`, `bun run test` and `bun run build`.
-4. Pushes `deps/weekly-update-<date>` and opens a draft PR listing the bumps and the
-   check results. Pass `dry_run: true` in the workflow input to compute changes and
-   checks without pushing or opening a PR. If nothing changed, no PR is opened.
+3. Runs `bun run lint`, `bun run check`, `bun run test` and `bun run build`. If the
+   all-latest state passes, everything is kept. If a check fails, each candidate bump
+   is applied on its own and reverted when it breaks a check, so the pushed branch only
+   contains updates that keep the checks green. Skipped packages are retried
+   automatically on the next weekly run (every run starts from latest again).
+4. Pushes `deps/weekly-update-<date>` and opens a draft PR that lists updated and
+   skipped packages, the failing check output for each skipped one, and the final
+   check results. Pass `dry_run: true` in the workflow input to compute the decisions
+   without pushing or opening a PR. If nothing changed or nothing can be applied
+   safely, no PR is opened.
 
 ## Layout
 

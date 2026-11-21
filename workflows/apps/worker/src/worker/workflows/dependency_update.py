@@ -1,11 +1,15 @@
 """Weekly dependency update for the site repo.
 
-Clones the repository, runs ``bun update --latest`` (latest versions, ignoring the
-ranges in package.json, so majors included), runs the project checks, pushes a
-``deps/weekly-update-<date>`` branch and opens a draft pull request. The GitHub token
-comes from the ``GITHUB_TOKEN`` environment variable (the console-bound name
-``github_token`` also works), bound from a workspace secret on
-the managed deployment; a scheduled run has no user, so it cannot use user OAuth.
+Clones the repository and updates every dependency to its latest version (majors
+included via ``bun update --latest``). The all-latest state is checked first; when a
+check fails, each candidate bump is applied on its own and reverted when it breaks a
+check, so the pushed branch only contains updates that keep lint/check/test/build
+green. Skipped packages are retried automatically on the next weekly run (every run
+starts from latest again). The result is pushed as ``deps/weekly-update-<date>`` with a
+draft PR that lists updated and skipped packages and why. The GitHub token comes from
+the ``GITHUB_TOKEN`` env var (the console-bound name ``github_token`` also works),
+bound from a workspace secret on the managed deployment; a scheduled run has no user,
+so it cannot use user OAuth.
 """
 
 import asyncio
@@ -25,6 +29,7 @@ CLONE_TIMEOUT_SECONDS = 300
 BUN_TIMEOUT_SECONDS = 600
 CHECK_TIMEOUT_SECONDS = 600
 PUSH_TIMEOUT_SECONDS = 300
+OUTPUT_TAIL_CHARS = 2000
 
 
 class DependencyUpdateInput(BaseModel):
@@ -38,6 +43,14 @@ class DependencyChange(BaseModel):
     name: str
     previous: str
     current: str
+
+
+class SkippedChange(BaseModel):
+    name: str
+    previous: str
+    current: str
+    failed_check: str
+    output: str
 
 
 class CheckResult(BaseModel):
@@ -57,6 +70,7 @@ class PrepareInput(BaseModel):
 class PrepareResult(BaseModel):
     branch: str | None = None
     changes: list[DependencyChange] = Field(default_factory=list)
+    skipped: list[SkippedChange] = Field(default_factory=list)
     checks: list[CheckResult] = Field(default_factory=list)
 
 
@@ -66,6 +80,7 @@ class PullRequestInput(BaseModel):
     base_branch: str
     branch: str
     changes: list[DependencyChange]
+    skipped: list[SkippedChange]
     checks: list[CheckResult]
 
 
@@ -77,6 +92,7 @@ class DependencyUpdateResult(BaseModel):
     branch: str | None = None
     pr_url: str | None = None
     changes: list[DependencyChange] = Field(default_factory=list)
+    skipped: list[SkippedChange] = Field(default_factory=list)
     checks: list[CheckResult] = Field(default_factory=list)
     dry_run: bool = False
     message: str = ""
@@ -116,7 +132,7 @@ async def _run(cmd: list[str], cwd: Path, env: dict[str, str] | None = None, tim
         await proc.wait()
         raise workflows.WorkflowError(f"command timed out after {timeout}s: {' '.join(cmd[:2])}") from None
     if proc.returncode != 0:
-        output = (proc.stdout or b"")[:2000].decode(errors="replace") if proc.stdout else ""
+        output = (proc.stdout or b"")[:OUTPUT_TAIL_CHARS].decode(errors="replace") if proc.stdout else ""
         raise workflows.WorkflowError(f"command failed ({proc.returncode}): {' '.join(cmd[:2])}\n{output}")
     return proc.returncode
 
@@ -135,7 +151,21 @@ async def _run_check(cmd: list[str], cwd: Path, timeout: int) -> tuple[bool, str
         await proc.wait()
         return False, f"timed out after {timeout}s"
     output = (out or b"").decode(errors="replace")
-    return proc.returncode == 0, "" if proc.returncode == 0 else output[-2000:]
+    return proc.returncode == 0, "" if proc.returncode == 0 else output[-OUTPUT_TAIL_CHARS:]
+
+
+async def _run_checks(workdir: Path) -> tuple[CheckResult | None, list[CheckResult]]:
+    """Run all checks in order, stopping at the first failure.
+
+    Returns the failing check (None when all pass) and the results collected so far.
+    """
+    results: list[CheckResult] = []
+    for name in CHECKS:
+        passed, output = await _run_check(["bun", "run", name], cwd=workdir, timeout=CHECK_TIMEOUT_SECONDS)
+        results.append(CheckResult(name=name, passed=passed, output=output))
+        if not passed:
+            return results[-1], results
+    return None, results
 
 
 def _diff_dependencies(before: dict, after: dict) -> list[DependencyChange]:
@@ -154,22 +184,42 @@ def _pr_body(args: PullRequestInput) -> str:
     lines = [
         "## Summary",
         "",
-        f"- Weekly automated dependency update (`bun update --latest`): {len(args.changes)} package(s) bumped to the latest version, majors included",
+        f"- Weekly automated dependency update (`bun update --latest`, majors included): "
+        f"**{len(args.changes)} updated**, **{len(args.skipped)} skipped** (they break checks)",
+        "- Skipped packages are retried automatically on the next weekly run",
         "",
-        "| Package | From | To |",
-        "| --- | --- | --- |",
     ]
-    for change in args.changes:
-        lines.append(f"| {change.name} | {change.previous} | {change.current} |")
-    lines += ["", "## Checklist", ""]
+    if args.changes:
+        lines += ["## Updated", "", "| Package | From | To |", "| --- | --- | --- |"]
+        for change in args.changes:
+            lines.append(f"| {change.name} | {change.previous} | {change.current} |")
+        lines.append("")
+    if args.skipped:
+        lines += [
+            "## Skipped (breaks checks — retried next run)",
+            "",
+            "| Package | From | To | Failed check |",
+            "| --- | --- | --- | --- |",
+        ]
+        for skipped in args.skipped:
+            lines.append(f"| {skipped.name} | {skipped.previous} | {skipped.current} | `bun run {skipped.failed_check}` |")
+        lines += ["", "### Why skipped", ""]
+        for skipped in args.skipped:
+            lines += [
+                "<details>",
+                f"<summary><code>{skipped.name}</code> — <code>bun run {skipped.failed_check}</code> failed</summary>",
+                "",
+                "```",
+                skipped.output,
+                "```",
+                "",
+                "</details>",
+                "",
+            ]
+    lines += ["## Checklist", ""]
     for check in args.checks:
         mark = "x" if check.passed else " "
         lines.append(f"- [{mark}] `bun run {check.name}`")
-    failed = [c for c in args.checks if not c.passed]
-    if failed:
-        lines += ["", "## Failed check output", ""]
-        for check in failed:
-            lines += ["<details>", f"<summary><code>bun run {check.name}</code> — failed</summary>", "", "```", check.output, "```", "", "</details>", ""]
     lines += [
         "",
         "<!-- e2e tests run in CI on this PR -->",
@@ -178,7 +228,7 @@ def _pr_body(args: PullRequestInput) -> str:
     return "\n".join(lines)
 
 
-@workflows.activity(start_to_close_timeout=timedelta(minutes=25), retry_policy_max_attempts=2)
+@workflows.activity(start_to_close_timeout=timedelta(minutes=45), retry_policy_max_attempts=2)
 async def prepare_dependency_update(args: PrepareInput) -> PrepareResult:
     token = _github_token()
     env = _git_auth_env(token)
@@ -186,18 +236,53 @@ async def prepare_dependency_update(args: PrepareInput) -> PrepareResult:
     repo_url = f"https://github.com/{args.owner}/{args.repo}.git"
     await _run(["git", "clone", "--depth", "1", "--branch", args.base_branch, repo_url, str(workdir)], cwd=workdir.parent, env=env, timeout=CLONE_TIMEOUT_SECONDS)
 
-    before = json.loads((workdir / "package.json").read_text())
+    manifest = workdir / "package.json"
+    lockfile = workdir / "bun.lock"
+    before = json.loads(manifest.read_text())
     await _run(["bun", "update", "--latest"], cwd=workdir, timeout=BUN_TIMEOUT_SECONDS)
-    after = json.loads((workdir / "package.json").read_text())
-    changes = _diff_dependencies(before, after)
+    candidates = _diff_dependencies(before, json.loads(manifest.read_text()))
 
-    checks: list[CheckResult] = []
-    for name in CHECKS:
-        passed, output = await _run_check(["bun", "run", name], cwd=workdir, timeout=CHECK_TIMEOUT_SECONDS)
-        checks.append(CheckResult(name=name, passed=passed, output=output))
+    failed, checks = await _run_checks(workdir)
+    accepted: list[DependencyChange] = []
+    skipped: list[SkippedChange] = []
+    if candidates and failed is not None:
+        # All-latest breaks a check: apply candidates one at a time, reverting any that fail.
+        await _run(["git", "checkout", "--", "package.json", "bun.lock"], cwd=workdir, env=env, timeout=60)
+        await _run(["bun", "install"], cwd=workdir, timeout=BUN_TIMEOUT_SECONDS)
+        snapshots: list[tuple[bytes, bytes]] = []
+        for change in candidates:
+            snapshots.append((manifest.read_bytes(), lockfile.read_bytes()))
+            await _run(["bun", "update", "--latest", change.name], cwd=workdir, timeout=BUN_TIMEOUT_SECONDS)
+            failed, _ = await _run_checks(workdir)
+            if failed is None:
+                accepted.append(change)
+                continue
+            manifest.write_bytes(snapshots[-1][0])
+            lockfile.write_bytes(snapshots[-1][1])
+            snapshots.pop()
+            await _run(["bun", "install"], cwd=workdir, timeout=BUN_TIMEOUT_SECONDS)
+            skipped.append(
+                SkippedChange(name=change.name, previous=change.previous, current=change.current, failed_check=failed.name, output=failed.output)
+            )
+        # If the combined accepted state still fails (interactions), drop the most recent accepts until green.
+        while accepted:
+            failed, _ = await _run_checks(workdir)
+            if failed is None:
+                break
+            manifest.write_bytes(snapshots[-1][0])
+            lockfile.write_bytes(snapshots[-1][1])
+            snapshots.pop()
+            await _run(["bun", "install"], cwd=workdir, timeout=BUN_TIMEOUT_SECONDS)
+            change = accepted.pop()
+            skipped.append(
+                SkippedChange(name=change.name, previous=change.previous, current=change.current, failed_check=failed.name, output=failed.output)
+            )
+        _, checks = await _run_checks(workdir)
+    else:
+        accepted = candidates
 
-    if args.dry_run:
-        return PrepareResult(branch=None, changes=changes, checks=checks)
+    if args.dry_run or not accepted:
+        return PrepareResult(branch=None, changes=accepted, skipped=skipped, checks=checks)
 
     branch = f"deps/weekly-update-{args.run_date}"
     await _run(["git", "checkout", "-b", branch], cwd=workdir, env=env, timeout=60)
@@ -209,7 +294,7 @@ async def prepare_dependency_update(args: PrepareInput) -> PrepareResult:
         timeout=60,
     )
     await _run(["git", "push", "--force", "origin", f"HEAD:refs/heads/{branch}"], cwd=workdir, env=env, timeout=PUSH_TIMEOUT_SECONDS)
-    return PrepareResult(branch=branch, changes=changes, checks=checks)
+    return PrepareResult(branch=branch, changes=accepted, skipped=skipped, checks=checks)
 
 
 @workflows.activity(start_to_close_timeout=timedelta(minutes=5), retry_policy_max_attempts=3)
@@ -256,9 +341,15 @@ class WeeklyDependencyUpdate:
             PrepareInput(owner=data.owner, repo=data.repo, base_branch=data.base_branch, run_date=run_date, dry_run=data.dry_run)
         )
         if not prepared.changes:
-            return DependencyUpdateResult(dry_run=data.dry_run, checks=prepared.checks, message="no dependency updates available")
+            if prepared.skipped:
+                message = f"all {len(prepared.skipped)} candidate update(s) break checks; nothing applied, retried next run"
+            else:
+                message = "no dependency updates available"
+            return DependencyUpdateResult(dry_run=data.dry_run, skipped=prepared.skipped, checks=prepared.checks, message=message)
         if data.dry_run or prepared.branch is None:
-            return DependencyUpdateResult(dry_run=True, changes=prepared.changes, checks=prepared.checks, message="dry run: changes computed, nothing pushed, no PR opened")
+            return DependencyUpdateResult(
+                dry_run=True, changes=prepared.changes, skipped=prepared.skipped, checks=prepared.checks, message="dry run: changes computed, nothing pushed, no PR opened"
+            )
         pr = await open_dependency_pr(
             PullRequestInput(
                 owner=data.owner,
@@ -266,6 +357,7 @@ class WeeklyDependencyUpdate:
                 base_branch=data.base_branch,
                 branch=prepared.branch,
                 changes=prepared.changes,
+                skipped=prepared.skipped,
                 checks=prepared.checks,
             )
         )
@@ -273,6 +365,7 @@ class WeeklyDependencyUpdate:
             branch=prepared.branch,
             pr_url=pr.pr_url,
             changes=prepared.changes,
+            skipped=prepared.skipped,
             checks=prepared.checks,
             dry_run=False,
             message="draft PR opened",

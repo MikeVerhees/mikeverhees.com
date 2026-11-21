@@ -314,13 +314,21 @@ async def open_dependency_pr(args: PullRequestInput) -> PullRequestResult:
         )
         existing.raise_for_status()
         open_prs = existing.json()
-        if open_prs:
-            return PullRequestResult(pr_url=open_prs[0]["html_url"])
         run_date = args.branch.rsplit("-", 1)[-1]
+        title = f"chore(deps): weekly dependency update {run_date}"
+        if open_prs:
+            # A re-run on the same date branch: refresh the existing PR's title and body.
+            number = open_prs[0]["number"]
+            updated = await client.patch(
+                f"/repos/{args.owner}/{args.repo}/pulls/{number}",
+                json={"title": title, "body": _pr_body(args)},
+            )
+            updated.raise_for_status()
+            return PullRequestResult(pr_url=open_prs[0]["html_url"])
         created = await client.post(
             f"/repos/{args.owner}/{args.repo}/pulls",
             json={
-                "title": f"chore(deps): weekly dependency update {run_date}",
+                "title": title,
                 "head": args.branch,
                 "base": args.base_branch,
                 "body": _pr_body(args),

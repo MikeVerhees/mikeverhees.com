@@ -1,0 +1,6 @@
+# Tools the workflows capability's dependency-update workflow needs in the worker image:
+# git pushes the deps branch, curl/unzip install Bun, ca-certificates for TLS.
+ca-certificates
+curl
+git
+unzip

@@ -11,5 +11,8 @@ esac
 curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-${arch}.zip" -o /tmp/bun.zip
 unzip -q /tmp/bun.zip -d /tmp/bun
 install -m 755 "/tmp/bun/bun-linux-${arch}/bun" /usr/local/bin/bun
+# The site's scripts call `bunx --bun ...`; bunx is the same binary under a second name.
+ln -sf /usr/local/bin/bun /usr/local/bin/bunx
 rm -rf /tmp/bun /tmp/bun.zip
 bun --version
+bunx --version

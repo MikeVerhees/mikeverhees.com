@@ -5,8 +5,9 @@ Mistral Workflows app that keeps the site's dependencies current. One workflow,
 see the schedule on the managed deployment):
 
 1. Clones `MikeVerhees/mikeverhees.com` (default branch) with a GitHub token from the
-   `GITHUB_TOKEN` env var (bound from a workspace secret on the deployment — a
-   scheduled run has no user, so user OAuth cannot be used).
+   `GITHUB_TOKEN` env var (the console binds the workspace secret `github_token`; the
+   code also accepts the lowercase `github_token` env var) — a scheduled run has no
+   user, so user OAuth cannot be used.
 2. Runs `bun update --latest` (latest versions, ignoring package.json ranges, majors
    included) and diffs `package.json`.
 3. Runs `bun run lint`, `bun run check`, `bun run test` and `bun run build`.
@@ -35,8 +36,9 @@ cd ../.. && bunx nx run worker:semgrep
 
 Deploy from a pushed commit with the Studio workflows API (`deploy_workflow_deployment`,
 build directory `workflows`, Dockerfile `deploy/docker/Dockerfile.worker`), bind the
-workspace secret as `GITHUB_TOKEN`, then attach the weekly schedule with
-`create_workflow_schedule` (cron `0 8 * * 1`, time zone `Europe/Amsterdam`, input
+workspace secret `github_token` on the deployment's Settings tab, then attach the
+weekly schedule with `create_workflow_schedule` (cron `0 8 * * 1`, time zone
+`Europe/Amsterdam`, input
 `{"owner": "MikeVerhees", "repo": "mikeverhees.com", "base_branch": "main"}`).
 
 The token needs `contents: write` and `pull requests: write` on the repository

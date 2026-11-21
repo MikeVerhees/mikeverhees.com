@@ -3,7 +3,8 @@
 Clones the repository, runs ``bun update --latest`` (latest versions, ignoring the
 ranges in package.json, so majors included), runs the project checks, pushes a
 ``deps/weekly-update-<date>`` branch and opens a draft pull request. The GitHub token
-comes from the ``GITHUB_TOKEN`` environment variable, bound from a workspace secret on
+comes from the ``GITHUB_TOKEN`` environment variable (the console-bound name
+``github_token`` also works), bound from a workspace secret on
 the managed deployment; a scheduled run has no user, so it cannot use user OAuth.
 """
 
@@ -81,10 +82,10 @@ class DependencyUpdateResult(BaseModel):
 
 
 def _github_token() -> str:
-    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    token = (os.environ.get("GITHUB_TOKEN") or os.environ.get("github_token") or "").strip()
     if not token:
         raise workflows.WorkflowError(
-            "github_token_not_configured: bind a workspace secret to the GITHUB_TOKEN env var",
+            "github_token_not_configured: bind the workspace secret 'github_token' to a GITHUB_TOKEN env var",
             non_retryable=True,
         )
     return token

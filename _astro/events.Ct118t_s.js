@@ -1,0 +1,1 @@
+import{S as e}from"./client.CL8MV4vn.js";e(),typeof window<`u`&&((globalThis.__svelte??={}).v??=new Set).add(`5`);var t={toggleTheme:`site:toggle-theme`,petCat:`site:pet-cat`,openPalette:`site:open-palette`};function n(e){window.dispatchEvent(new CustomEvent(e))}export{n,t};
